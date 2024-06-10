@@ -7,16 +7,19 @@
         <main>
             <router-view></router-view>
         </main>
-        <footer>
-            <!-- Footer público -->
-            <p>Footer Público</p>
-        </footer>
+
+        <AppFooter />
     </div>
 </template>
 
 <script>
+import AppFooter from '@/components/AppFooter.vue';
+
 export default {
-    name: 'PublicLayout'
+    name: 'PublicLayout',
+    components: {
+        AppFooter
+    }
 };
 </script>
 
