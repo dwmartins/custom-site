@@ -2,11 +2,9 @@ import { store } from "@/store";
 
 class MetaManager {
     API_URL;
-    constants;
 
     constructor() {
         this.API_URL = process.env.VUE_APP_API_URL;
-        this.constants = store.state.constants;
     }
 
     setAllMeta() {
@@ -16,14 +14,10 @@ class MetaManager {
     }
 
     setIcon() {
-        let link = document.querySelector('link[rel="icon"]');
-        
-        if (link) {
-            link.setAttribute('href', `${this.API_URL}/uploads/site/icon.ico`);
-        } else {
-            link = document.createElement('link');
+        if(store.state.constants.icon) {
+            let link = document.createElement('link');
             link.setAttribute('rel', 'icon');
-            link.setAttribute('href', `${this.API_URL}/uploads/site/icon.ico`);
+            link.setAttribute('href', `${this.API_URL}/uploads/site/${store.state.constants.icon}`);
             document.head.appendChild(link);
         }
     }
