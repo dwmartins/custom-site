@@ -2,7 +2,7 @@
     <footer class="container-fluid bg-body-secondary">
         <div class="container p-3">
             <div class="row">
-                <div class="col-4 col-md-4 d-flex justify-content-center align-items-center mb-3 p-0">
+                <div class="col-3 col-md-4 d-flex justify-content-center align-items-center mb-3 p-0">
                     <ul class="navbar-nav">
                         <li class="nav-item text-secondary"><router-link to="/" class="nav-link">Home</router-link></li>
                         <li class="nav-item text-secondary"><router-link to="/empresa" class="nav-link">Empresa</router-link></li>
@@ -12,7 +12,7 @@
                     </ul>
                 </div>
 
-                <div class="col-8 col-md-4">
+                <div class="col-9 col-md-4">
                     <div class="d-flex justify-content-center align-items-center h-100 mb-3 p-0">
                         <div class="d-flex flex-column gap-2">
                             <a v-if="constants.phone" class="fs-6 link_outline_none text-secondary" :href="`https://wa.me/${constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp me-2"></i>{{ constants.phone }}</a>
@@ -66,5 +66,7 @@ export default {
 <style>
 .logo-footer {
     width: 130px;
+    height: 65px;
+    object-fit: cover;
 }
 </style>
