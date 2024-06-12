@@ -176,6 +176,8 @@ class ConfigureApi extends Database{
                 workSchedule VARCHAR(250),
                 instagram VARCHAR(250),
                 facebook VARCHAR(250),
+                description LONGTEXT,
+                keywords LONGTEXT,
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);
             ";

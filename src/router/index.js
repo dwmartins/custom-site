@@ -23,7 +23,7 @@ const routes = [
         ]
     },
     {
-        path: '/admin',
+        path: '/app',
         component: AdminLayout,
         meta: { requiresAuth: true },
         children: [
@@ -33,6 +33,10 @@ const routes = [
                 component: DashBoardView
             }
         ]
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/'
     }
 ];
 
