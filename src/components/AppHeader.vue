@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 nav {
     box-shadow: 0 0 1rem rgba(0,0,0,.15)!important;
 }
