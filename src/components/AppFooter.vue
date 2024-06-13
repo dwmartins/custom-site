@@ -19,9 +19,9 @@
 
                             <a v-if="constants.email" class="fs-6 link_outline_none text-secondary" :href="`mailto:${constants.email}`" target="_blank"><i class="fa-regular fa-envelope me-2"></i>{{ constants.email }}</a>
 
-                            <a v-if="constants.instagram" class="fs-6 link_outline_none text-secondary" :href="constants.instagram" target="_blank"><i class="fa-brands fa-instagram me-2"></i>{{ constants.instagram }}</a>
+                            <a v-if="constants.instagram" class="fs-6 link_outline_none text-secondary" :href="constants.instagram" target="_blank"><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
 
-                            <a v-if="constants.facebook" class="fs-6 link_outline_none text-secondary" :href="constants.facebook" target="_blank"><i class="fa-brands fa-square-facebook me-2"></i>{{ constants.facebook }}</a> 
+                            <a v-if="constants.facebook" class="fs-6 link_outline_none text-secondary" :href="constants.facebook" target="_blank"><i class="fa-brands fa-square-facebook me-2"></i>Facebook</a> 
                         </div>
                     </div>
                 </div>
