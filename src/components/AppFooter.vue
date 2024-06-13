@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="col-12 text-secondary text-center fs-7" :class="constants.webSiteName && 'col-md-6 text-center'">
-                    <span>Desenvolvido por: <a class="link_outline_none text-info" href="https://dwmcode.com" target="_blank">dwmcode</a> Desenvolvimento de sites e otimizações</span>
+                    <span>Desenvolvido por: <a class="link_outline_none text-primary" href="https://dwmcode.com" target="_blank">dwmcode</a> Desenvolvimento de sites e otimizações</span>
                 </div>
             </div>
         </div>
