@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import defaultLogo from '@/assets/img/defaultLogo.png';
+import defaultLogo from '@/assets/img/default/defaultLogo.png';
 
 export default {
     name: 'AppHeader',

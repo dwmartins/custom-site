@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import defaultCoverImage from '@/assets/img/defaultCoverImage.png';
+import defaultCoverImage from '@/assets/img/default/defaultCoverImage.png';
 import AppReadyToStart from '@/components/AppReadyToStart.vue';
 import AOS from 'aos'
 import 'aos/dist/aos.css'
