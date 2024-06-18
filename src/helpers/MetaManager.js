@@ -1,4 +1,4 @@
-import { store } from "@/store";
+import { store } from "@/store/userStore";
 
 class MetaManager {
     API_URL;

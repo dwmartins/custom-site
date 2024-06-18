@@ -1,5 +1,5 @@
 import SiteInfoService from "./services/SiteInfoService";
-import { store } from "@/store/index";
+import { store } from "@/store/userStore";
 
 export default function initApp() {
     return new Promise((resolve, reject) => {

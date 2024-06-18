@@ -5,7 +5,7 @@ import initApp from './initApp';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import MetaManager from './helpers/MetaManager';
-import { store } from '@/store/index';
+import { store } from '@/store/userStore';
 import '@/assets/css/global.css';
 
 initApp().then(() => {
