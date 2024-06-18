@@ -33,6 +33,7 @@
 
 <script>
 import AppSpinnerLoading from '@/components/AppSpinnerLoading.vue';
+import { alertStore } from '@/store/alertStore';
 
 export default {
     name: 'LoginView',
@@ -114,9 +115,14 @@ export default {
 
         submitLogin() {
             if(this.validateFormLogin()) {
-                alert("Formulario valido")
+                this.spinnerLoading = true;
+                //TESTE
+                alertStore.addAlert('success', 'Login Realizado com sucesso.');
+                this.$router.push('/home');
+            } else {
+                alertStore.addAlert('info', 'Preencha todos os campos obrigatórios');
             }
-        }
+        },
     }
 };
 </script>
