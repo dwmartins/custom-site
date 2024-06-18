@@ -37,8 +37,8 @@
                 </ul>
 
                 <div class="social-network d-flex gap-3 justify-content-center fs-3 text-center">
-                    <a v-if="constants.instagram" class="text-secondary" :href="constants.instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a v-if="constants.phone" class="text-secondary" :href="`https://wa.me/${constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a v-if="siteInfoStore.constants.instagram" class="text-secondary" :href="siteInfoStore.constants.instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a v-if="siteInfoStore.constants.phone" class="text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
@@ -47,14 +47,15 @@
 
 <script>
 import defaultLogo from '@/assets/img/default/defaultLogo.png';
+import { siteInfoStore } from '@/store/siteInfoStore';
 
 export default {
     name: 'AppHeader',
 
     data() {
         return {
-            constants: this.$store.state.constants,
-            logoImage: this.$store.state.constants.logoImage ? `${this.$API_URL}/uploads/site/${this.$store.state.constants.logoImage}` : defaultLogo
+            siteInfoStore,
+            logoImage: siteInfoStore.constants.logoImage ? `${this.$API_URL}/uploads/site/${siteInfoStore.constants.logoImage}` : defaultLogo
         }
     },
 

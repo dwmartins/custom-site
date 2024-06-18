@@ -1,12 +1,12 @@
 import SiteInfoService from "./services/SiteInfoService";
-import { store } from "@/store/siteInfoStore";
+import { siteInfoStore } from "./store/siteInfoStore";
 
 export default function initApp() {
     return new Promise((resolve, reject) => {
         SiteInfoService.getSiteInfo()
             .then(response => {
                 const [data] = response.data;
-                store.dispatch('updateConstants', data);
+                siteInfoStore.updateConstants(data);
 
                 resolve();
             })

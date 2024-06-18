@@ -57,8 +57,10 @@
 <script>
 import defaultCoverImage from '@/assets/img/default/defaultCoverImage.png';
 import AppReadyToStart from '@/components/AppReadyToStart.vue';
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { siteInfoStore } from '@/store/siteInfoStore';
+
 
 export default {
     name: 'HomeView',
@@ -69,7 +71,7 @@ export default {
 
     data() {
         return {
-            coverImage: this.$store.state.constants.coverImage ? `${this.$API_URL}/uploads/site/${this.$store.state.constants.coverImage}` : defaultCoverImage
+            coverImage: siteInfoStore.constants.coverImage ? `${this.$API_URL}/uploads/site/${siteInfoStore.constants.coverImage}` : defaultCoverImage
         }
     },
 

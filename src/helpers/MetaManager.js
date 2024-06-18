@@ -1,4 +1,4 @@
-import { store } from "@/store/siteInfoStore";
+import { siteInfoStore } from "@/store/siteInfoStore";
 
 class MetaManager {
     API_URL;
@@ -14,32 +14,32 @@ class MetaManager {
     }
 
     setIcon() {
-        if(store.state.constants.icon) {
+        if(siteInfoStore.constants.icon) {
             let link = document.createElement('link');
             link.setAttribute('rel', 'icon');
-            link.setAttribute('href', `${this.API_URL}/uploads/site/${store.state.constants.icon}`);
+            link.setAttribute('href', `${this.API_URL}/uploads/site/${siteInfoStore.constants.icon}`);
             document.head.appendChild(link);
         }
     }
 
     setTitle() {
-        if(store.state.constants.webSiteName) {
-            document.title = store.state.constants.webSiteName;
+        if(siteInfoStore.constants.webSiteName) {
+            document.title = siteInfoStore.constants.webSiteName;
         }
     }
 
     setMeta() {
-        if(store.state.constants.description) {
+        if(siteInfoStore.constants.description) {
             let metaTag = document.createElement('meta');
             metaTag.setAttribute('name', 'description');
-            metaTag.setAttribute('content', store.state.constants.description);
+            metaTag.setAttribute('content', siteInfoStore.constants.description);
             document.head.appendChild(metaTag); 
         }
 
-        if(store.state.constants.keywords) {
+        if(siteInfoStore.constants.keywords) {
             let metaTag = document.createElement('meta');
             metaTag.setAttribute('name', 'keywords');
-            metaTag.setAttribute('content', store.state.constants.keywords);
+            metaTag.setAttribute('content', siteInfoStore.constants.keywords);
             document.head.appendChild(metaTag); 
         }
 

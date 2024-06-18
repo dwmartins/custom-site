@@ -15,13 +15,13 @@
                 <div class="col-9 col-md-4">
                     <div class="d-flex justify-content-center align-items-center h-100 mb-3 p-0">
                         <div class="d-flex flex-column gap-2">
-                            <a v-if="constants.phone" class="fs-6 link_outline_none text-secondary" :href="`https://wa.me/${constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp me-2"></i>{{ constants.phone }}</a>
+                            <a v-if="siteInfoStore.constants.phone" class="fs-6 link_outline_none text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp me-2"></i>{{ siteInfoStore.constants.phone }}</a>
 
-                            <a v-if="constants.email" class="fs-6 link_outline_none text-secondary" :href="`mailto:${constants.email}`" target="_blank"><i class="fa-regular fa-envelope me-2"></i>{{ constants.email }}</a>
+                            <a v-if="siteInfoStore.constants.email" class="fs-6 link_outline_none text-secondary" :href="`mailto:${siteInfoStore.constants.email}`" target="_blank"><i class="fa-regular fa-envelope me-2"></i>{{ siteInfoStore.constants.email }}</a>
 
-                            <a v-if="constants.instagram" class="fs-6 link_outline_none text-secondary" :href="constants.instagram" target="_blank"><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
+                            <a v-if="siteInfoStore.constants.instagram" class="fs-6 link_outline_none text-secondary" :href="siteInfoStore.constants.instagram" target="_blank"><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
 
-                            <a v-if="constants.facebook" class="fs-6 link_outline_none text-secondary" :href="constants.facebook" target="_blank"><i class="fa-brands fa-square-facebook me-2"></i>Facebook</a> 
+                            <a v-if="siteInfoStore.constants.facebook" class="fs-6 link_outline_none text-secondary" :href="siteInfoStore.constants.facebook" target="_blank"><i class="fa-brands fa-square-facebook me-2"></i>Facebook</a> 
                         </div>
                     </div>
                 </div>
@@ -34,11 +34,11 @@
             </div>
             <hr>
             <div class="row">
-                <div v-if="constants.webSiteName" class="col-12 col-md-6 text-secondary text-center fs-7 mb-3">
-                    <span>{{ constants.webSiteName }} &copy; {{ new Date().getFullYear() }}</span>
+                <div v-if="siteInfoStore.constants.webSiteName" class="col-12 col-md-6 text-secondary text-center fs-7 mb-3">
+                    <span>{{ siteInfoStore.constants.webSiteName }} &copy; {{ new Date().getFullYear() }}</span>
                 </div>
 
-                <div class="col-12 text-secondary text-center fs-7" :class="constants.webSiteName && 'col-md-6 text-center'">
+                <div class="col-12 text-secondary text-center fs-7" :class="siteInfoStore.constants.webSiteName && 'col-md-6 text-center'">
                     <span>Desenvolvido por: <a class="link_outline_none text-primary" href="https://dwmcode.com" target="_blank">dwmcode</a> Desenvolvimento de sites e otimizações</span>
                 </div>
             </div>
@@ -48,15 +48,16 @@
 
 <script>
 import defaultLogo from '@/assets/img/default/defaultLogo.png';
+import { siteInfoStore } from '@/store/siteInfoStore';
 
 export default {
     name: 'AppFooter',
     
     data() {
         return {
-            constants: this.$store.state.constants,
+            siteInfoStore,
             api_url: this.$API_URL,
-            logoImage: this.$store.state.constants.logoImage ? `${this.$API_URL}/uploads/site/${this.$store.state.constants.logoImage}` : defaultLogo
+            logoImage: siteInfoStore.constants.logoImage ? `${this.$API_URL}/uploads/site/${siteInfoStore.constants.logoImage}` : defaultLogo
         }
     }
 };
