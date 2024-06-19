@@ -13,6 +13,7 @@ initApp().then(() => {
     app.mount('#app');
 
     app.config.globalProperties.$API_URL = process.env.VUE_APP_API_URL;
+    
     MetaManager.setAllMeta()
 });
 

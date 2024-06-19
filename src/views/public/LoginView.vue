@@ -34,6 +34,8 @@
 <script>
 import AppSpinnerLoading from '@/components/AppSpinnerLoading.vue';
 import { alertStore } from '@/store/alertStore';
+import AuthService from '@/services/AuthService';
+import { showError } from '@/helpers/showError';
 
 export default {
     name: 'LoginView',
@@ -116,9 +118,18 @@ export default {
         submitLogin() {
             if(this.validateFormLogin()) {
                 this.spinnerLoading = true;
-                //TESTE
-                alertStore.addAlert('success', 'Login Realizado com sucesso.');
-                this.$router.push('/home');
+
+                AuthService.login(this.user).then(response => {
+                    this.spinnerLoading = false;
+                    alertStore.addAlert('success', 'Login realizado com sucesso.');
+                    AuthService.setUserLogged(response.data);
+                    this.$router.push('/app')
+                })
+                .catch(error => {
+                    showError(error);
+                    this.spinnerLoading = false;
+                })
+
             } else {
                 alertStore.addAlert('info', 'Preencha todos os campos obrigatórios');
             }
