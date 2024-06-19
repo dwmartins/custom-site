@@ -4,6 +4,7 @@ import AdminLayout from '@/layouts/AdminLayout.vue';
 import HomeView from '@/views/public/HomeView.vue';
 import LoginView from '@/views/public/LoginView.vue';
 import DashBoardView from '@/views/admin/DashBoardView.vue';
+import BasicInformationView from '@/views/admin/BasicInformationView.vue'
 import AuthService from '@/services/AuthService';
 import { alertStore } from '@/store/alertStore';
 import { showError } from '@/helpers/showError';
@@ -33,7 +34,13 @@ const routes = [
             {
                 path: '',
                 name: 'DashBoard',
-                component: DashBoardView
+                component: DashBoardView,
+            },
+            {
+                path: 'informacoes-basicas',
+                name: 'Informacoes-basicas',
+                component: BasicInformationView,
+                meta: { isAdminOnly: true }
             }
         ]
     },
@@ -49,19 +56,27 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if(to.meta.requiresAuth) {
-        AuthService.auth().then((response) => {
-            console.log(response.data)
-            next();
-        })
-        .catch((error) => {
-            if(error.statusCode === 401) {
-                alertStore.addAlert('error', error.message);
-                next({name: 'Login'});
-            } else {
-                showError(error, router);
-            }
-        })
+    const requiresAuth = to.meta.requiresAuth;
+    const isAdminOnly = to.meta.isAdminOnly;
+
+    if (requiresAuth || isAdminOnly) {
+        AuthService.auth()
+            .then((response) => {
+                if (isAdminOnly && response.data.role !== 'admin') {
+                    alertStore.addAlert('info', 'Restrito apenas para administradores');
+                    next({ name: 'Home' });
+                } else {
+                    next();
+                }
+            })
+            .catch((error) => {
+                if (error.statusCode === 401) {
+                    alertStore.addAlert('error', error.message);
+                    next({ name: 'Login' });
+                } else {
+                    showError(error, router);
+                }
+            });
     } else {
         next();
     }
