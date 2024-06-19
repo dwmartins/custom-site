@@ -7,6 +7,7 @@ import DashBoardView from '@/views/admin/DashBoardView.vue';
 import BasicInformationView from '@/views/admin/BasicInformationView.vue'
 import AuthService from '@/services/AuthService';
 import { alertStore } from '@/store/alertStore';
+import { loadingPageStore } from '@/store/loadingPageStore';
 import { showError } from '@/helpers/showError';
 
 const routes = [
@@ -60,8 +61,10 @@ router.beforeEach((to, from, next) => {
     const isAdminOnly = to.meta.isAdminOnly;
 
     if (requiresAuth || isAdminOnly) {
+        loadingPageStore.showLoadingPage();
         AuthService.auth()
             .then((response) => {
+                loadingPageStore.hideLoadingPage()
                 if (isAdminOnly && response.data.role !== 'admin') {
                     alertStore.addAlert('info', 'Restrito apenas para administradores');
                     next({ name: 'Home' });
@@ -70,6 +73,7 @@ router.beforeEach((to, from, next) => {
                 }
             })
             .catch((error) => {
+                loadingPageStore.hideLoadingPage()
                 if (error.statusCode === 401) {
                     alertStore.addAlert('error', error.message);
                     next({ name: 'Login' });
