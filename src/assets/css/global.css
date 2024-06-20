@@ -1,3 +1,7 @@
+:root {
+    --text-primary: #4e66f8;
+}
+
 * {
     font-family: 'Poppins', sans-serif;
     color: #303F4E;
@@ -44,7 +48,7 @@ html {
 }
 
 .text-primary {
-    color: #4e66f8 !important;
+    color: var(--text-primary) !important;
 }
 
 .btn-primary {

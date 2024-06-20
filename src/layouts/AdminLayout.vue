@@ -6,22 +6,22 @@
             </div>
             <ul class="navbar-nav p-2">
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" to="/app"><i class="fa-solid fa-gears me-2 opacity-75"></i>Dashboard</router-link>
+                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/dashboard"><i class="fa-solid fa-gears me-2 opacity-75"></i>Dashboard</router-link>
                 </li>
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" to="/app/informacoes-basicas"><i class="fa-solid fa-gears me-2 opacity-75"></i>Informações Básicas</router-link>
+                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/informacoes-basicas"><i class="fa-solid fa-gears me-2 opacity-75"></i>Informações Básicas</router-link>
                 </li>
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" to="/app/portfolio"><i class="fa-solid fa-image me-2 opacity-75"></i>Portfolio</router-link>
+                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/portfolio"><i class="fa-solid fa-image me-2 opacity-75"></i>Portfolio</router-link>
                 </li>
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" to="/app/projetos-selecionados"><i class="fa-solid fa-photo-film me-2 opacity-75"></i>Projetos Selecionados</router-link>
+                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/projetos-selecionados"><i class="fa-solid fa-photo-film me-2 opacity-75"></i>Projetos Selecionados</router-link>
                 </li>
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" to="/app/usuarios"><i class="fa-solid fa-users me-2 opacity-75"></i>Usuários</router-link>
+                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/usuarios"><i class="fa-solid fa-users me-2 opacity-75"></i>Usuários</router-link>
                 </li>
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" to="/app/configuracoes-email"><i class="fa-solid fa-envelope me-2 opacity-75"></i>Configurações de e-mail</router-link>
+                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/configuracoes-email"><i class="fa-solid fa-envelope me-2 opacity-75"></i>Configurações de e-mail</router-link>
                 </li>
             </ul>
         </nav>
@@ -127,6 +127,11 @@ export default {
 </script>
 
 <style scoped>
+.active-link, .active-link i{
+    color: var(--text-primary) !important;
+    font-weight: bold;
+}
+
 nav {
     transition: ease-out 0.3s;
     max-width: 270px;

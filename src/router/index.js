@@ -35,7 +35,7 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
             {
-                path: '',
+                path: 'dashboard',
                 name: 'DashBoard',
                 component: DashBoardView,
             },
@@ -54,6 +54,10 @@ const routes = [
                 name: 'Usuarios',
                 component: UsersView,
                 meta: { isAdminOnly: true }
+            },
+            {
+                path: '/:pathMatch(.*)*',
+                redirect: '/app/dashboard'
             }
         ]
     },

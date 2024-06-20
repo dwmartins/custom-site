@@ -123,7 +123,7 @@ export default {
                     this.spinnerLoading = false;
                     alertStore.addAlert('success', 'Login realizado com sucesso.');
                     AuthService.setUserLogged(response.data);
-                    this.$router.push('/app')
+                    this.$router.push('/app/dashboard')
                 })
                 .catch(error => {
                     showError(error);
