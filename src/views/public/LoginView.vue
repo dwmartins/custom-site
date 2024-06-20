@@ -59,7 +59,18 @@ export default {
         }
     },
 
+    created() {
+        this.isLoggedIn();
+    },
+
     methods: {
+        isLoggedIn() {
+            if(AuthService.getUserLogged()) {
+                alertStore.addAlert('success', 'Você já está logado.');
+                this.$router.push('/app/dashboard');
+            }
+        },
+
         showPassword() {
             this.viewPassword = !this.viewPassword;
             this.inputPassword = this.viewPassword ? 'text' : 'password';
@@ -123,7 +134,7 @@ export default {
                     this.spinnerLoading = false;
                     alertStore.addAlert('success', 'Login realizado com sucesso.');
                     AuthService.setUserLogged(response.data);
-                    this.$router.push('/app/dashboard')
+                    this.$router.push('/app/dashboard');
                 })
                 .catch(error => {
                     showError(error);
