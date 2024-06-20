@@ -34,10 +34,10 @@
                     <a id="btn-visit-site" href="/" target="_blank" class="btn btn-outline-primary d-flex align-items-center"><i v-if="innerWidth >= 342" class="fa-solid fa-globe me-1 text-primary"></i>SITE</a>
                     <div class="dropdown">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="user-photo" :src="user.photo" alt="Foto">
-                            {{ user.name }}
+                            <img class="user-photo me-1" :src="userStore.user.photo ? user.pathPhoto + userStore.user.photo : require('@/assets/img/default/user.png')" alt="Foto">
+                            {{ userStore.user.name }}
                             <template v-if="innerWidth >= 375">
-                                {{ user.lastName }}
+                                {{ userStore.user.lastName }}
                             </template>
                         </button>
                         <ul class="dropdown-menu">
@@ -62,10 +62,10 @@
 <script>
 import { siteInfoStore } from '@/store/siteInfoStore';
 import defaultLogo from '@/assets/img/default/defaultLogo.png';
-import defaultUserPhoto from '@/assets/img/default/user.png';
 import AuthService from '@/services/AuthService';
 import { OhVueIcon, addIcons } from 'oh-vue-icons';
 import { MdManageaccountsOutlined, MdLogout } from 'oh-vue-icons/icons';
+import { userStore } from '@/store/userStore';
 
 addIcons(MdManageaccountsOutlined, MdLogout);
 
@@ -79,14 +79,13 @@ export default {
     data() {
         return {
             siteInfoStore,
+            userStore,
             logoImage: siteInfoStore.constants.logoImage ? `${this.$API_URL}/uploads/site/${siteInfoStore.constants.logoImage}` : defaultLogo, 
             innerWidth: 0,
             showNav: true,
             iconNavigation: "fa-xmark",
             user: {
-                name: "Douglas",
-                lastName: "Martins",
-                photo: defaultUserPhoto
+                pathPhoto: `${this.$API_URL}/uploads/images/users/`
             }
         }
     },
@@ -186,7 +185,7 @@ nav .nav-link i {
 }
 
 .user-photo {
-    widows: 35px;
+    width: 35px;
     height: 35px;
     border-radius: 50%;
     object-fit: cover;

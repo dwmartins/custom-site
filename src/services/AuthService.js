@@ -1,4 +1,5 @@
 import axios from '@/http';
+import { userStore } from '@/store/userStore';
 
 class AuthService {
     getUserLogged() {
@@ -7,11 +8,20 @@ class AuthService {
     }
 
     setUserLogged(userData) {
+        userStore.updateUserLogged(userData);
         localStorage.setItem('userData', JSON.stringify(userData));
+    }
+
+    setUserStore() {
+        const user = this.getUserLogged();
+        if(user) {
+            userStore.updateUserLogged(user);
+        }
     }
 
     updateUserLogged(userData) {
         localStorage.removeItem('userData');
+        userStore.updateUserLogged(userData);
         this.setUserLogged(userData);
     }
 
@@ -38,6 +48,7 @@ class AuthService {
 
     logout() {
         localStorage.removeItem('userData');
+        userStore.clean();
     }
 }
 

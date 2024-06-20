@@ -1,5 +1,5 @@
 <template>
-    <section id="dashboardView" class="bg-danger vh-100">
+    <section id="dashboardView">
         <h1>DashBoard</h1>
     </section>
 </template>
