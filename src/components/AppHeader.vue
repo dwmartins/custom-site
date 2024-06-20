@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary mx-0 z-1">
+    <nav id="appHeader" class="navbar navbar-expand-lg bg-body-tertiary mx-0 z-1">
         <div class="container">
             <router-link class="navbar-brand p-1" to="/">
                 <div class="d-flex align-items-center ">

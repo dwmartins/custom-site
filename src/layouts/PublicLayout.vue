@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <section id="publicLayout">
         <AppHeader />
         <main>
             <router-view></router-view>
         </main>
         <AppFooter />
-    </div>
+    </section>
 </template>
 
 <script>

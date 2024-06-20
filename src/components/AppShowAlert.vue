@@ -1,5 +1,5 @@
 <template>
-    <div class="alert-container">
+    <div id="appShowAlert" class="alert-container">
       <div v-for="(alert, index) in alertStore.alerts" :key="index" :class="['alert', 'alert-' + alert.type]" class="d-flex align-items-center">
         <i v-if="alert.type === 'success'" class="fa-regular fa-circle-check fs-5 pe-2 text-white"></i>
         <i v-if="alert.type === 'error'" class="fa-solid fa-circle-exclamation fs-5 pe-2 text-white"></i>

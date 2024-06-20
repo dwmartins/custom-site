@@ -5,6 +5,8 @@ import HomeView from '@/views/public/HomeView.vue';
 import LoginView from '@/views/public/LoginView.vue';
 import DashBoardView from '@/views/admin/DashBoardView.vue';
 import BasicInformationView from '@/views/admin/BasicInformationView.vue'
+import PortfolioView from '@/views/admin/PortfolioView.vue';
+import UsersView from '@/views/admin/UsersView.vue';
 import AuthService from '@/services/AuthService';
 import { alertStore } from '@/store/alertStore';
 import { loadingPageStore } from '@/store/loadingPageStore';
@@ -41,6 +43,16 @@ const routes = [
                 path: 'informacoes-basicas',
                 name: 'Informacoes-basicas',
                 component: BasicInformationView,
+            },
+            {
+                path: 'portfolio',
+                name: 'Portfolio',
+                component: PortfolioView
+            },
+            {
+                path: 'usuarios',
+                name: 'Usuarios',
+                component: UsersView,
                 meta: { isAdminOnly: true }
             }
         ]
@@ -59,13 +71,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.meta.requiresAuth;
     const isAdminOnly = to.meta.isAdminOnly;
+    const isComingFromApp = from.path.startsWith('/app');
 
-    if (requiresAuth || isAdminOnly) {
+    // Função para realizar a autenticação e verificar o papel do usuário
+    function authenticateAndCheckRole() {
         loadingPageStore.showLoadingPage();
         AuthService.auth()
             .then((response) => {
-                loadingPageStore.hideLoadingPage()
-                if (isAdminOnly && response.data.role !== 'admin') {
+                loadingPageStore.hideLoadingPage();
+                if (isAdminOnly && response.data.role !== 'admin' && response.data.role !== 'super') {
                     alertStore.addAlert('info', 'Restrito apenas para administradores');
                     next({ name: 'Home' });
                 } else {
@@ -73,7 +87,7 @@ router.beforeEach((to, from, next) => {
                 }
             })
             .catch((error) => {
-                loadingPageStore.hideLoadingPage()
+                loadingPageStore.hideLoadingPage();
                 if (error.statusCode === 401) {
                     alertStore.addAlert('error', error.message);
                     next({ name: 'Login' });
@@ -81,6 +95,13 @@ router.beforeEach((to, from, next) => {
                     showError(error, router);
                 }
             });
+    }
+
+    // Verifica se autenticação é necessária e se não vem da rota /app
+    if (requiresAuth && !isComingFromApp) {
+        authenticateAndCheckRole();
+    } else if (isAdminOnly) { // Se apenas a administração é necessária
+        authenticateAndCheckRole();
     } else {
         next();
     }

@@ -1,5 +1,5 @@
 <template>
-    <footer class="container-fluid bg-body-secondary">
+    <footer id="appFooter" class="container-fluid bg-body-secondary">
         <div class="container p-3">
             <div class="row">
                 <div class="col-3 col-md-4 d-flex justify-content-center align-items-center mb-3 p-0">

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="loadingPageStore.props.showAlert" class="spinner-overlay">
+    <div id="appLoadingPage" v-if="loadingPageStore.props.showAlert" class="spinner-overlay">
         <div class="d-flex flex-column align-items-center">
             <div class="spinner-border text-primary custom_spinner mb-2" role="status">
                 <span class="visually-hidden">Loading...</span>

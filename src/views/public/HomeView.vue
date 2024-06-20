@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section id="homeView">
         <div class="cover-image container-fluid" :style="{backgroundImage: `url(${coverImage})`}">
             <div class="container">
                 <div class="container h-100 cover-content">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="d-none d-md-block col-md-6 p-4" data-aos="fade-left">
-                    <img class="img-fluid rounded img-about " src="@/assets/img/imgAbout.jpg" alt="imagem sobre nós">
+                    <img class="img-fluid rounded img-about " src="@/assets/img/imgAbout.png" alt="imagem sobre nós">
                 </div>
             </div>
             <hr class="custom-hr-dark">
