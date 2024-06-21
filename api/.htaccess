@@ -1,3 +1,9 @@
+# Bloquear acesso direto ao arquivo .env
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-d

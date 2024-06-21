@@ -1,0 +1,5 @@
+# Impedir listagem de diretório
+Options -Indexes
+
+# Bloquear acesso a todos os arquivos na pasta src
+Deny from all
