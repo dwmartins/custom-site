@@ -9,7 +9,12 @@ class MigrationManager extends Database{
     protected $db;
 
     public function __construct() {
-       $this->db = self::getConnection();
+        try {
+            $this->db = self::getConnection();
+        } catch (PDOException $e) {
+            showAlertLog("ERROR: ". $e->getMessage());
+            throw $e;
+        }
     }
 
     public function migrate() {
@@ -35,7 +40,7 @@ class MigrationManager extends Database{
 
             showSuccessLog("Migrations have been executed successfully.");
         } catch (PDOException $e) {
-            die("Error: " . $e->getMessage());
+            showAlertLog("ERROR: ". $e->getMessage());
         }
     }
 
@@ -66,7 +71,7 @@ class MigrationManager extends Database{
     
             showSuccessLog("Rollback executed successfully");
         } catch (PDOException $e) {
-            die("Error: " . $e->getMessage());
+            showAlertLog("ERROR: ". $e->getMessage());
         }
     }
 

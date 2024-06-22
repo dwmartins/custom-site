@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use PDO;
-
+use PDOException;
 class Database {
     public static function getConnection() {
         $host       = $_ENV['DB_HOST'];
@@ -12,8 +12,12 @@ class Database {
         $password   = $_ENV['DB_PASSWORD'];
         $dbType     = $_ENV['DB_TYPE'];
 
-        $pdo = new PDO("$dbType:host=$host;dbname=$dbname", $username, $password);
-
-        return $pdo;
+        try {
+            $pdo = new PDO("$dbType:host=$host;dbname=$dbname", $username, $password);
+            return $pdo;
+        } catch (PDOException $e) {
+            logError($e->getMessage());
+            return throw $e;
+        }
     }
 }
