@@ -22,13 +22,15 @@ class MigrationManager extends Database{
             $this->createMigrationsTableIfNotExists();
             $appliedMigrations = $this->getAppliedMigrations();
             $migrationsFiles = scandir(__DIR__ . '/../../migrations');
-            $migrationsToApply = array_diff($migrationsFiles, $appliedMigrations);
+            $migrationsToApply = array_diff($migrationsFiles, ['.', '..', '.gitignore']);
+            $pendingMigrations = array_diff($migrationsToApply, $appliedMigrations);
 
-            foreach ($migrationsToApply as $migrationFile) {
-                if ($migrationFile === '.' || $migrationFile === '..') {
-                    continue;
-                }
+            if(empty($pendingMigrations)) {
+                showLog("No pending migrations to apply.");
+                return;
+            }
 
+            foreach ($pendingMigrations as $migrationFile) {
                 require_once __DIR__ . '/../../migrations/' . $migrationFile;
                 $className = pathinfo($migrationFile, PATHINFO_FILENAME);
                 $migration = new $className();
@@ -46,6 +48,25 @@ class MigrationManager extends Database{
 
     public function rollback($whichMigration = null, $order = 1) {
         try {
+            if($whichMigration) {
+                $migrationApplied = $this->getMigration($whichMigration);
+                $migrationFile = __DIR__ . '/../../Migrations/' . $whichMigration;
+
+                if($migrationApplied && file_exists($migrationFile)) {
+                    require_once __DIR__ . '/../../migrations/' . $whichMigration;
+                    $className = pathinfo($whichMigration, PATHINFO_FILENAME);
+                    $migration = new $className();
+                    $migration->down();
+                    $this->removeMigrationRecord($whichMigration);
+                    showLog("Running the rollback to $migrationApplied", true);
+                    showSuccessLog("Rollback executed successfully");
+                    return;
+                } else {
+                    showLog("The migration ($whichMigration) was not found.");
+                    return;
+                }
+            }
+
             $appliedMigrations = $this->getAppliedMigrations();
             $migrationsToRollback = array_reverse($appliedMigrations);
 
@@ -53,11 +74,6 @@ class MigrationManager extends Database{
             foreach ($migrationsToRollback as $migrationFile) {
                 if ($count >= $order) {
                     break; // Stop the loop if it reaches the desired number of rollback migrations
-                }
-
-                // Check if $whichMigration is set and matches the current migration being processed
-                if ($whichMigration !== null && $migrationFile !== $whichMigration) {
-                    continue; // Skip this migration if it's not the specified one
                 }
 
                 require_once __DIR__ . '/../../migrations/' . $migrationFile;
@@ -87,6 +103,13 @@ class MigrationManager extends Database{
 
     protected function getAppliedMigrations() {
         $stmt = $this->db->prepare("SELECT migration FROM migrations");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    protected function getMigration($migrationFile) {
+        $stmt = $this->db->prepare("SELECT migration FROM migrations WHERE migration = :migration");
+        $stmt->bindValue(':migration', $migrationFile);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
