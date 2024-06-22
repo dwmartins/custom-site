@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\JWTManager;
 use App\Models\Database;
 
 class Migration_20240622191707_table_users extends Database{
@@ -26,6 +27,20 @@ class Migration_20240622191707_table_users extends Database{
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
+
+        $sql = $sql = "INSERT INTO users (name, email, password, token, active, role) VALUES (?, ?, ?, ?, ?, ?);";
+        $stmt = $this->db->prepare($sql);
+
+        $values = [
+            "Administrador",
+            $_ENV['DEVEMAIL'],
+            password_hash("aguip707", PASSWORD_DEFAULT),
+            JWTManager::newCrypto(),
+            "Y",
+            "super"
+        ];
+
+        $stmt->execute($values);
     }
 
     public function down() {

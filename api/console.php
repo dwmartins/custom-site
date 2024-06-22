@@ -17,6 +17,7 @@ if (isset($argv[1])) {
             if (isset($argv[2])) {
                 GenerateMigrationCommand::execute($argv[2]);
             } else {
+                showLog("you need to write a name for the migration.");
                 showLog("Usage: php console.php generate:migration DESCRIPTIVE_NAME");
             }
             break;
@@ -25,6 +26,7 @@ if (isset($argv[1])) {
             if (isset($argv[2])) {
                 GenerateControllerCommand::execute($argv[2]);
             } else {
+                showLog("you need to write a name for the controller.");
                 showLog("Usage: php console.php generate:controller NAME");
             }
             break;
@@ -33,6 +35,7 @@ if (isset($argv[1])) {
             if (isset($argv[2])) {
                 GenerateClassCommand::execute($argv[2]);
             } else {
+                showLog("you need to write a name for the Class.");
                 showLog("Usage: php console.php generate:class NAME");
             }
             break;
@@ -57,9 +60,9 @@ if (isset($argv[1])) {
 function showCommands() {
     showLog("Command not found!");
     echo PHP_EOL;
-    showLog(" php console.php generate:migration DESCRIPTIVE_NAME - To generate a new migration");
     showLog(" php console.php generate:controller NAME - To generate a new controller");
     showLog(" php console.php Generate:class NAME - To generate a new class");
+    showLog(" php console.php generate:migration DESCRIPTIVE_NAME - To generate a new migration");
     showLog(" php console.php migrate - To run migrations");
     showLog(" php console.php rollback - To rollback the last migration");
     showLog(" php console.php rollback --name:NAME_MIGRATION to rollback a specific migration. ");
