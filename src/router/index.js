@@ -54,16 +54,16 @@ const routes = [
                 name: 'Usuarios',
                 component: UsersView,
                 meta: { isAdminOnly: true }
-            },
-            {
-                path: '/:pathMatch(.*)*',
-                redirect: '/app/dashboard'
             }
         ]
     },
     {
         path: '/:pathMatch(.*)*',
         redirect: '/'
+    },
+    {
+        path: '/app/:pathMatch(.*)*',
+        redirect: '/app/dashboard'
     }
 ];
 

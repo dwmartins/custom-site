@@ -1,15 +1,31 @@
 <?php
 
-require_once __DIR__."/../../vendor/autoload.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-$envPath = __DIR__ . "/../../.env";
+$envProduction = __DIR__ . "/../../.env";
+$envDevelopment = __DIR__ . "/../../.env.development";
+$envPath = "";
 
-if (!file_exists($envPath)) {
-    echo "\033[41mArquivo (.env) não encontrado.\033[0m\n";
+if (file_exists($envProduction)) {
+    $envPath = $envProduction;
+    echo "\033[41mAtenção, estamos em modo produção. \033[0m\n";
+} elseif (file_exists($envDevelopment)) {
+    $envPath = $envDevelopment;
+    echo "\033[41mAtenção, estamos em modo de desenvolvimento. \033[0m\n";
+} else {
+    echo "\033[41mNenhum arquivo (.env ou .env.development) encontrado.\033[0m\n";
     exit();
 }
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__."/../../");
+echo "Você deseja continuar com a criação das tabelas do banco de dados? S/N: " . PHP_EOL;
+$continue = rtrim(fgets(STDIN));
+
+if ($continue !== "S") {
+    exit();
+}
+
+$dotenvDir = dirname($envPath);
+$dotenv = Dotenv\Dotenv::createImmutable($dotenvDir, basename($envPath));
 $dotenv->load();
 
 use App\Http\JWTManager;
@@ -203,17 +219,17 @@ class ConfigureApi extends Database{
 
             $values = [
                 "Administrador",
-                $_ENV['ADMEMAIL'],
+                $_ENV['DEVEMAIL'],
                 password_hash("abc123", PASSWORD_DEFAULT),
                 JWTManager::newCrypto(),
                 "y",
-                "admin"
+                "super"
             ];
 
             $stmt->execute($values);
 
             echo "\nDados do usuário administrador do site: \n";
-            echo "Usuário: {$_ENV['ADMEMAIL']} \n";
+            echo "Usuário: {$_ENV['DEVEMAIL']} \n";
             echo "Senha: abc123 \n \n";
             echo "Altere sua senha no gerenciador do site para uma de sua preferência. \n";
 
