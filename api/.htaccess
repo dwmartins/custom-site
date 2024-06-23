@@ -4,7 +4,7 @@
     Deny from all
 </Files>
 
-# Bloquear acesso direto ao arquivo .env
+# Bloquear acesso direto ao arquivo console.php
 <Files "console.php">
     Order allow,deny
     Deny from all

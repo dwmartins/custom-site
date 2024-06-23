@@ -11,25 +11,43 @@ class GenerateClassCommand {
     private static function generateClass($name) {
         $className = ucfirst($name);
         $filename = "{$className}.php";
+
+        $fileExists = __DIR__ . "/../Class/{$filename}";
+
+        if(file_exists($fileExists)) {
+            showAlertLog("This Class already exists.");
+            return;
+        }
+
         $template = <<<EOT
 <?php
 
 namespace App\Classes;
 
+use App\Models\
+
 class {$className} {
-    // Implementação da classe
+    // getters and setters methods
 }
 
 EOT;
 
         $path = __DIR__ . "/../Class/{$filename}";
         file_put_contents($path, $template);
-        showSuccessLog("Classe criada: {$filename}.");
+        showSuccessLog("Class created: {$filename}");
     }
 
     private static function generateModel($name) {
         $className = ucfirst($name) . 'DAO';
         $filename = "{$className}.php";
+
+        $fileExists = __DIR__ . "/../Models/{$filename}";
+
+        if(file_exists($fileExists)) {
+            showAlertLog("This Model already exists.");
+            return;
+        }
+
         $template = <<<EOT
 <?php
 
@@ -41,23 +59,28 @@ class {$className} extends Database{
     protected \$db;
 
     public function __construct(Database \$db) {
-        \$this->db = self::getConnection();
+        try {
+            \$this->db = self::getConnection();
+        } catch (PDOException \$e) {
+            showAlertLog("ERROR: ". \$e->getMessage());
+            throw \$e;
+        }
     }
 
-    public function create(\$data) {
-        // Implementação do método de criação
+    public function save(\$data) {
+        // Implementation of the creation method
     }
 
-    public function read(\$id) {
-        // Implementação do método de leitura
+    public function fetch(\$id) {
+        // Implementation of the read method
     }
 
     public function update(\$data) {
-        // Implementação do método de atualização
+        // Update method implementation
     }
 
     public function delete(\$id) {
-        // Implementação do método de deleção
+        // Implementation of the delete method
     }
 }
 
@@ -65,6 +88,6 @@ EOT;
 
         $path = __DIR__ . "/../Models/{$filename}";
         file_put_contents($path, $template);
-        showSuccessLog("Model criada: {$filename}");
+        showSuccessLog("Model created: {$filename}");
     }
 }
