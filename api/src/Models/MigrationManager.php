@@ -60,9 +60,16 @@ class MigrationManager extends Database{
                     $this->removeMigrationRecord($whichMigration);
                     showLog("Running the rollback to $migrationApplied", true);
                     showSuccessLog("Rollback executed successfully");
+
+                    // Delete the rollback migration
+                    $filePatch = __DIR__ . '/../../migrations/' . $whichMigration;
+                    if(file_exists($filePatch)) {
+                        unlink($filePatch);
+                    }
+
                     return;
                 } else {
-                    showLog("The migration ($whichMigration) was not found.");
+                    showAlertLog("The migration ($whichMigration) was not found.");
                     return;
                 }
             }
@@ -83,6 +90,12 @@ class MigrationManager extends Database{
                 $count++;
                 $this->removeMigrationRecord($migrationFile);
                 showLog("Running the rollback to $migrationFile", true);
+
+                // Delete the rollback migration
+                $filePatch = __DIR__ . '/../../migrations/' . $migrationFile;
+                if(file_exists($filePatch)) {
+                    unlink($filePatch);
+                }
             }
     
             showSuccessLog("Rollback executed successfully");

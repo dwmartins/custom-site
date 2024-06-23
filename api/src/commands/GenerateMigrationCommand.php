@@ -16,15 +16,25 @@ class Migration_{$timestamp}_{$description} extends Database{
     protected \$db;
 
     public function __construct() {
-        \$this->db = self::getConnection();
+        try {
+            \$this->db = self::getConnection();
+        } catch (PDOException \$e) {
+            showAlertLog("ERROR: ". \$e->getMessage());
+            throw \$e;
+        }
     }
 
     public function up() {
         // Migration implementation (up)
-        //\$sql = "";
+        try {
+            \$sql = "";
 
-        //\$stmt = \$this->db->prepare(\$sql);
-        //\$stmt->execute();
+            \$stmt = \$this->db->prepare(\$sql);
+            \$stmt->execute();
+        } catch (PDOException \$e) {
+            showAlertLog("ERROR: ". \$e->getMessage());
+            throw \$e;
+        }
     }
 
     public function down() {
