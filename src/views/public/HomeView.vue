@@ -71,7 +71,7 @@ export default {
 
     data() {
         return {
-            coverImage: siteInfoStore.constants.coverImage ? `${this.$API_URL}/uploads/site/${siteInfoStore.constants.coverImage}` : defaultCoverImage
+            coverImage: siteInfoStore.constants.coverImage ? `${this.$API_URL}/uploads/systemImages/${siteInfoStore.constants.coverImage}` : defaultCoverImage
         }
     },
 

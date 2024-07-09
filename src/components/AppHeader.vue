@@ -55,7 +55,7 @@ export default {
     data() {
         return {
             siteInfoStore,
-            logoImage: siteInfoStore.constants.logoImage ? `${this.$API_URL}/uploads/site/${siteInfoStore.constants.logoImage}` : defaultLogo
+            logoImage: siteInfoStore.constants.logoImage ? `${this.$API_URL}/uploads/systemImages/${siteInfoStore.constants.logoImage}` : defaultLogo
         }
     },
 
