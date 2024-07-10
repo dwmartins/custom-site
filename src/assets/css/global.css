@@ -125,6 +125,14 @@ html {
 .link_outline_none {
     text-decoration: none;
 }
+
+.custom_dark {
+    color: #303F4E;
+}
+
+.custom-hr-dark {
+    color: #c6c9c9;
+}
 /* End Custom */
 
 /* Animations */
