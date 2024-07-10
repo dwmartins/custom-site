@@ -7,7 +7,6 @@ export default function initApp() {
         SiteInfoService.getSiteInfo()
             .then(response => {
                 const data = response.data;
-                console.log(data);
                 siteInfoStore.updateConstants(data);
                 AuthService.setUserStore();
 

@@ -12,6 +12,15 @@ class AuthService {
         localStorage.setItem('userData', JSON.stringify(userData));
     }
 
+    getPermissions() {
+        const userData = localStorage.getItem('userData');
+
+        if(userData) {
+            const user = JSON.parse(userData);
+            return user.permissions
+        }
+    }
+
     setUserStore() {
         const user = this.getUserLogged();
         if(user) {
@@ -34,16 +43,15 @@ class AuthService {
             return Promise.reject(error);
         }
 
-        return axios.get('/users/auth', {
+        return axios.get('/auth/auth', {
             headers: {
-                'Authorization': `Bearer ${user.token}`,
-                'userId': user.id
+                'Authorization': `Bearer userId:${user.id} token:${user.token}`,
             }
         });
     }
 
     login(credentials) {
-        return axios.post('/users/login', credentials);
+        return axios.post('/auth/login', credentials);
     }
 
     logout() {

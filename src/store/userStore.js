@@ -12,16 +12,31 @@ export const userStore = reactive({
         role: "",
         photo: "",
         createdAt: "",
-        updatedAt: ""
+        updatedAt: "",
+        permissions: {
+            users: "",
+            content: "",
+            siteInfo: "",
+            emailSending: "",
+        }
     },
 
     updateUserLogged(data) {
-        userStore.user = { ...userStore.user, ...data };
+        if (data.permissions) {
+            this.user.permissions = { ...this.user.permissions, ...data.permissions };
+        }
+        this.user = { ...this.user, ...data };
     },
 
     clean() {
         for (let key in this.user) {
-            this.user[key] = "";
+            if (typeof this.user[key] === 'object') {
+                for (let subKey in this.user[key]) {
+                    this.user[key][subKey] = "";
+                }
+            } else {
+                this.user[key] = "";
+            }
         }
     }
-})
+});

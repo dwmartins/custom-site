@@ -10,7 +10,7 @@ import UsersView from '@/views/admin/UsersView.vue';
 import AuthService from '@/services/AuthService';
 import { alertStore } from '@/store/alertStore';
 import { loadingPageStore } from '@/store/loadingPageStore';
-import { showError } from '@/helpers/showError';
+import { showError } from '@/helpers/showError'; 
 
 const routes = [
     {
@@ -43,17 +43,19 @@ const routes = [
                 path: 'informacoes-basicas',
                 name: 'Informacoes-basicas',
                 component: BasicInformationView,
+                meta: {requirePermission: 'siteInfo' }
             },
             {
                 path: 'portfolio',
                 name: 'Portfolio',
-                component: PortfolioView
+                component: PortfolioView,
+                meta: {requirePermission: 'content' }
             },
             {
                 path: 'usuarios',
                 name: 'Usuarios',
                 component: UsersView,
-                meta: { isAdminOnly: true }
+                meta: {requirePermission: 'users' }
             }
         ]
     },
@@ -73,19 +75,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const requiresAuth = to.meta.requiresAuth;
-    const isAdminOnly = to.meta.isAdminOnly;
-    const isComingFromApp = from.path.startsWith('/app');
-
-    // Função para realizar a autenticação e verificar o papel do usuário
-    function authenticateAndCheckRole() {
+    const { requiresAuth, requirePermission } = to.meta;
+    const isEnteringApp = to.path.startsWith('/app') && !from.path.startsWith('/app');
+    
+    if (requiresAuth && isEnteringApp) {
         loadingPageStore.showLoadingPage();
         AuthService.auth()
-            .then((response) => {
+            .then(() => {
                 loadingPageStore.hideLoadingPage();
-                if (isAdminOnly && response.data.role !== 'admin' && response.data.role !== 'super') {
-                    alertStore.addAlert('info', 'Restrito apenas para administradores');
-                    next({ name: 'Home' });
+                if (requirePermission) {
+                    checkPermissions(to, next);
                 } else {
                     next();
                 }
@@ -97,18 +96,27 @@ router.beforeEach((to, from, next) => {
                     next({ name: 'Login' });
                 } else {
                     showError(error, router);
+                    next({ name: 'Home' });
                 }
             });
-    }
-
-    // Verifica se autenticação é necessária e se não vem da rota /app
-    if (requiresAuth && !isComingFromApp) {
-        authenticateAndCheckRole();
-    } else if (isAdminOnly) { // Se apenas a administração é necessária
-        authenticateAndCheckRole();
+    } else if (requirePermission) {
+        checkPermissions(to, next);
     } else {
         next();
     }
 });
+
+function checkPermissions(to, next) {
+    const { requirePermission } = to.meta;
+    const permissions = AuthService.getPermissions();
+    const permission = permissions[requirePermission];
+
+    if (permission.permission) {
+        next();
+    } else {
+        alertStore.addAlert('error', 'Você não tem permissão para acessar essa área.');
+        next('/app/dashboard');
+    }
+}
 
 export default router;
