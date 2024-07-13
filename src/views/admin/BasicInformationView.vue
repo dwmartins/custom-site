@@ -77,6 +77,11 @@ export default {
 </script>
 
 <style scoped>
+.logo-image {
+    display: flex;
+    justify-content: center;
+}
+
 .logo-image img{
     width: 200px;
     height: 100px;

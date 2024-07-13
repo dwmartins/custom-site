@@ -1,27 +1,28 @@
 <template>
     <section id="adminLayout">
         <nav class="h-100 w-100 shadow" :class="showNav && 'showNav'">
-            <div class="nav-logo d-flex justify-content-center py-3">
+            <div class="nav-logo d-flex justify-content-center py-3 position-relative">
                 <img :src="logoImage" alt="Logo do site">
+                <i class="fa-solid fs-4 fa-xmark position-absolute close-nav"></i>
             </div>
-            <ul class="navbar-nav p-2">
+            <ul class="navbar-nav p-2 fs-7">
                 <li class="nav-item p-1">
-                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/dashboard"><i class="fa-solid fa-gears me-2 opacity-75"></i>Dashboard</router-link>
+                    <router-link class="nav-link" active-class="active-link" to="/app/dashboard"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</router-link>
                 </li>
                 <li class="nav-item p-1" v-if="userStore.user.permissions.siteInfo.permission">
-                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/informacoes-basicas"><i class="fa-solid fa-gears me-2 opacity-75"></i>Informações Básicas</router-link>
+                    <router-link class="nav-link" active-class="active-link" to="/app/informacoes-basicas"><i class="fa-solid fa-gears me-2"></i>Informações Básicas</router-link>
                 </li>
                 <li class="nav-item p-1" v-if="userStore.user.permissions.content.permission">
-                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/portfolio"><i class="fa-solid fa-image me-2 opacity-75"></i>Portfolio</router-link>
+                    <router-link class="nav-link" active-class="active-link" to="/app/portfolio"><i class="fa-solid fa-image me-2"></i>Portfolio</router-link>
                 </li>
                 <li class="nav-item p-1" v-if="userStore.user.permissions.content.permission">
-                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/projetos-selecionados"><i class="fa-solid fa-photo-film me-2 opacity-75"></i>Projetos Selecionados</router-link>
+                    <router-link class="nav-link" active-class="active-link" to="/app/projetos-selecionados"><i class="fa-solid fa-photo-film me-2"></i>Projetos Selecionados</router-link>
                 </li>
                 <li class="nav-item p-1" v-if="userStore.user.permissions.users.permission">
-                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/usuarios"><i class="fa-solid fa-users me-2 opacity-75"></i>Usuários</router-link>
+                    <router-link class="nav-link" active-class="active-link" to="/app/usuarios"><i class="fa-solid fa-users me-2"></i>Usuários</router-link>
                 </li>
                 <li class="nav-item p-1" v-if="userStore.user.permissions.emailSending.permission">
-                    <router-link class="nav-link text-secondary" active-class="active-link" to="/app/configuracoes-email"><i class="fa-solid fa-envelope me-2 opacity-75"></i>Configurações de e-mail</router-link>
+                    <router-link class="nav-link" active-class="active-link" to="/app/configuracoes-email"><i class="fa-solid fa-envelope me-2"></i>Configurações de e-mail</router-link>
                 </li>
             </ul>
         </nav>
@@ -42,10 +43,10 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li class="mb-2">
-                                <router-link class="dropdown-item" to="/app/minha-conta"><v-icon class="me-2" name="md-manageaccounts-outlined"/>Minha conta</router-link>
+                                <router-link class="dropdown-item" to="/app/minha-conta"><i class="fa-regular fa-user me-2"></i>Minha conta</router-link>
                             </li>
                             <li>
-                                <a class="dropdown-item cursor_pointer" @click="logout()"><v-icon class="me-2" name="md-logout"/>Sair</a>
+                                <a class="dropdown-item cursor_pointer" @click="logout()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a>
                             </li>
                         </ul>
                     </div>
@@ -63,18 +64,10 @@
 import { siteInfoStore } from '@/store/siteInfoStore';
 import defaultLogo from '@/assets/img/default/defaultLogo.png';
 import AuthService from '@/services/AuthService';
-import { OhVueIcon, addIcons } from 'oh-vue-icons';
-import { MdManageaccountsOutlined, MdLogout } from 'oh-vue-icons/icons';
 import { userStore } from '@/store/userStore';
-
-addIcons(MdManageaccountsOutlined, MdLogout);
 
 export default {
     name: 'AdminLayout',
-
-    components: {
-        'v-icon': OhVueIcon
-    },
 
     data() {
         return {
@@ -127,9 +120,13 @@ export default {
 </script>
 
 <style scoped>
+
+#adminLayout {
+    overflow-x: hidden;
+}
+
 .active-link, .active-link i{
-    color: var(--text-primary) !important;
-    font-weight: bold;
+    color: var(--color-primary) !important;
 }
 
 nav {
@@ -137,6 +134,11 @@ nav {
     max-width: 270px;
     position: absolute;
     left: -270px;
+    background-color: #293042;
+}
+
+nav li, nav li i {
+    color: #e2e8eeb2;
 }
 
 nav.showNav {
@@ -146,6 +148,7 @@ nav.showNav {
 main {
     margin-left: 0px;
     transition: ease-out 0.3s;
+    min-width: 280px;
 }
 
 main.showMain {
@@ -153,8 +156,20 @@ main.showMain {
 }
 
 nav .nav-link:hover, nav .nav-link:hover i {
-    color: #4e66f8 !important;
+    color: var(--color-primary) !important;
     font-weight: 600;
+}
+
+.close-nav {
+    top: 30px;
+    right: 30px;
+    display: none;
+}
+
+@media (max-width: 320px) {
+    .close-nav {
+        display: block;
+    }
 }
 
 .nav-logo img{
