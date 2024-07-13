@@ -1,10 +1,24 @@
 import axios from '@/http';
 import { userStore } from '@/store/userStore';
+import { alertStore } from '@/store/alertStore';
+import router from '@/router';
 
 class AuthService {
     getUserLogged() {
         const user = localStorage.getItem('userData');
         return user ? JSON.parse(user) : null;
+    }
+
+    validateLoggedUser() {
+        const user = this.getUserLogged();
+        if (!user) {
+            alertStore.addAlert('error', 'Token não fornecido, realize o login novamente.');
+            this.logout();
+            router.push('/login');
+            return null;
+        }
+
+        return user;
     }
 
     setUserLogged(userData) {
@@ -38,7 +52,7 @@ class AuthService {
         const user = this.getUserLogged();
 
         if(!user) {
-            const error = new Error('Token não fornecido, realize o login.');
+            const error = new Error('Token não fornecido, realize o login novamente.');
             error.statusCode = 401;
             return Promise.reject(error);
         }

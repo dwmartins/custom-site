@@ -3,7 +3,7 @@
         <nav class="h-100 w-100 shadow" :class="showNav && 'showNav'">
             <div class="nav-logo d-flex justify-content-center py-3 position-relative">
                 <img :src="logoImage" alt="Logo do site">
-                <i class="fa-solid fs-4 fa-xmark position-absolute close-nav"></i>
+                <i class="fa-solid fs-4 fa-xmark position-absolute close-nav" @click="showNavigation()"></i>
             </div>
             <ul class="navbar-nav p-2 fs-7">
                 <li class="nav-item p-1">

@@ -14,10 +14,10 @@ class MetaManager {
     }
 
     setIcon() {
-        if(siteInfoStore.constants.icon) {
+        if(siteInfoStore.constants.ico) {
             let link = document.createElement('link');
             link.setAttribute('rel', 'icon');
-            link.setAttribute('href', `${this.API_URL}/uploads/site/${siteInfoStore.constants.icon}`);
+            link.setAttribute('href', `${this.API_URL}/uploads/systemImages/${siteInfoStore.constants.ico}`);
             document.head.appendChild(link);
         }
     }

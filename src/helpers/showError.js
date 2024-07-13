@@ -4,7 +4,7 @@ import { alertStore } from "@/store/alertStore";
 export function showError(error, router = null) {
     console.error('ERROR', error);
 
-    if(error.response.status === 401) {
+    if(error.response.status && error.response.status === 401) {
         if(error.response.data.invalidToken) {
             alertStore.addAlert('error', error.response.data.invalidToken);
             AuthService.logout();

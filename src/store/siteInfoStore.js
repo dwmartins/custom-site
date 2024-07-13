@@ -13,7 +13,7 @@ export const siteInfoStore = reactive({
         facebook: "",
         description: "",
         keywords: "",
-        icon: "",
+        ico: "",
         logoImage: "",
         coverImage: "",
         defaultImage: ""

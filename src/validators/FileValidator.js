@@ -4,7 +4,7 @@ class FileValidator {
     validExtensions = ['image/jpeg', 'image/jpg', 'image/png'];
     fileSize = 5 * 1024 * 1024; // 5MB
 
-    validIconExtensions = ['image/vnd.microsoft.icon', 'image/x-icon'];
+    validIconExtensions = ['image/vnd.microsoft.icon', 'image/x-icon', 'image/jpeg', 'image/jpg', 'image/png'];
     iconFileSize = 5 * 1024 * 1024; // 5MB
 
     validImage(image) {
