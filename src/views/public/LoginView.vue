@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import AppSpinnerLoading from '@/components/AppSpinnerLoading.vue';
+import AppSpinnerLoading from '@/components/shared/AppSpinnerLoading.vue';
 import { alertStore } from '@/store/alertStore';
 import AuthService from '@/services/AuthService';
 import { showError } from '@/helpers/showError';

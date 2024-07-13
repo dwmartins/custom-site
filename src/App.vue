@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import AppShowAlert from './components/AppShowAlert.vue';
-import AppLoadingPage from '@/components/AppLoadingPage.vue';
+import AppShowAlert from './components/shared/AppShowAlert.vue';
+import AppLoadingPage from '@/components/shared/AppLoadingPage.vue';
 
 export default {
   name: 'App',
