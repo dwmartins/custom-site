@@ -123,6 +123,9 @@ export default {
 
 #adminLayout {
     overflow-x: hidden;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
 }
 
 .active-link, .active-link i{
@@ -183,7 +186,7 @@ nav .nav-link i {
 }
 
 .routes {
-    max-height: calc(100vh - 56px);
+    max-height: calc(100vh - 70px);
     overflow-y: scroll;
 }
 

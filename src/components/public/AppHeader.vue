@@ -77,8 +77,14 @@ nav {
 }
 
 .logo-header {
-    width: 130px;
-    height: 65px;
+    max-width: 100px;
+    max-height: 100px;
     object-fit: cover;
+}
+
+@media screen and (max-width: 768px) {
+    .logo-header {
+        max-width: 50px
+    }
 }
 </style>

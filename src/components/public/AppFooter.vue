@@ -3,7 +3,7 @@
         <div class="container p-3">
             <div class="row">
                 <div class="col-3 col-md-4 d-flex justify-content-center align-items-center mb-3 p-0">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav fs-7">
                         <li class="nav-item text-secondary"><router-link to="/" class="nav-link">Home</router-link></li>
                         <li class="nav-item text-secondary"><router-link to="/empresa" class="nav-link">Empresa</router-link></li>
                         <li class="nav-item text-secondary"><router-link to="/contato" class="nav-link">Contato</router-link></li>
@@ -12,16 +12,16 @@
                     </ul>
                 </div>
 
-                <div class="col-9 col-md-4">
+                <div class="col-9 col-md-4 fs-7">
                     <div class="d-flex justify-content-center align-items-center h-100 mb-3 p-0">
-                        <div class="d-flex flex-column gap-2">
-                            <a v-if="siteInfoStore.constants.phone" class="fs-6 link_outline_none text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp me-2"></i>{{ siteInfoStore.constants.phone }}</a>
+                        <div class="d-flex flex-column gap-2 fs-7">
+                            <a v-if="siteInfoStore.constants.phone" class="link_outline_none text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp me-2"></i>{{ siteInfoStore.constants.phone }}</a>
 
-                            <a v-if="siteInfoStore.constants.email" class="fs-6 link_outline_none text-secondary" :href="`mailto:${siteInfoStore.constants.email}`" target="_blank"><i class="fa-regular fa-envelope me-2"></i>{{ siteInfoStore.constants.email }}</a>
+                            <a v-if="siteInfoStore.constants.email" class="link_outline_none text-secondary" :href="`mailto:${siteInfoStore.constants.email}`" target="_blank"><i class="fa-regular fa-envelope me-2"></i>{{ siteInfoStore.constants.email }}</a>
 
-                            <a v-if="siteInfoStore.constants.instagram" class="fs-6 link_outline_none text-secondary" :href="siteInfoStore.constants.instagram" target="_blank"><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
+                            <a v-if="siteInfoStore.constants.instagram" class="link_outline_none text-secondary" :href="siteInfoStore.constants.instagram" target="_blank"><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
 
-                            <a v-if="siteInfoStore.constants.facebook" class="fs-6 link_outline_none text-secondary" :href="siteInfoStore.constants.facebook" target="_blank"><i class="fa-brands fa-square-facebook me-2"></i>Facebook</a> 
+                            <a v-if="siteInfoStore.constants.facebook" class="link_outline_none text-secondary" :href="siteInfoStore.constants.facebook" target="_blank"><i class="fa-brands fa-square-facebook me-2"></i>Facebook</a> 
                         </div>
                     </div>
                 </div>
@@ -33,12 +33,12 @@
                 </div>
             </div>
             <hr>
-            <div class="row">
-                <div v-if="siteInfoStore.constants.webSiteName" class="col-12 col-md-6 text-secondary text-center fs-7 mb-3">
+            <div class="row fs-8">
+                <div v-if="siteInfoStore.constants.webSiteName" class="col-12 col-md-6 text-secondary text-center mb-3">
                     <span>{{ siteInfoStore.constants.webSiteName }} &copy; {{ new Date().getFullYear() }}</span>
                 </div>
 
-                <div class="col-12 text-secondary text-center fs-7" :class="siteInfoStore.constants.webSiteName && 'col-md-6 text-center'">
+                <div class="col-12 text-body text-center fs-8" :class="siteInfoStore.constants.webSiteName && 'col-md-6 text-center'">
                     <span>Desenvolvido por: <a class="link_outline_none text-primary" href="https://dwmcode.com" target="_blank">dwmcode</a> Desenvolvimento de sites e otimizações</span>
                 </div>
             </div>
@@ -66,8 +66,14 @@ export default {
 
 <style scoped>
 .logo-footer {
-    width: 130px;
-    height: 65px;
+    max-width: 100px;
+    max-height: 100px;
     object-fit: cover;
+}
+
+@media screen and (max-width: 768px) {
+    .logo-footer {
+        max-width: 50px
+    }
 }
 </style>
