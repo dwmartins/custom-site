@@ -1,7 +1,7 @@
 <template>
     <section id="adminLayout">
         <nav class="h-100 w-100 shadow" :class="showNav && 'showNav'">
-            <div class="nav-logo d-flex justify-content-center py-3 position-relative">
+            <div class="nav-logo d-flex justify-content-center pt-1 position-relative">
                 <img :src="logoImage" alt="Logo do site">
                 <i class="fa-solid fs-4 fa-xmark position-absolute close-nav" @click="showNavigation()"></i>
             </div>
@@ -176,8 +176,8 @@ nav .nav-link:hover, nav .nav-link:hover i {
 }
 
 .nav-logo img{
-    width: 100px;
-    height: 50px;
+    max-width: 70px;
+    max-height: 70px;
     object-fit: cover;
 }
 
