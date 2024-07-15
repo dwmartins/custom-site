@@ -84,6 +84,10 @@
                         </div>
                     </div>
 
+                    <div v-if="updatedFiles()" class="mb-3 alerta-cache">
+                        <p class="m-0" >Pode ser necessário <span class="fw-medium cursor_pointer">recarregar a página</span> ou até limpar o cache do navegador para visualizar as alterações nas imagens.</p>
+                    </div>
+
                     <div class="d-flex justify-content-end">
                         <button @click="submitImages()" type="button" class="btn btn-sm btn-primary" :disabled="loadingSaveImgs || !updatedFiles()">
                             <template v-if="!loadingSaveImgs">
@@ -236,6 +240,16 @@ export default {
             return false;
         },
 
+        cleanFiles() {
+            for(let img in this.images) {
+                this.images[img] = null;
+            }
+
+            for(let preview in this.previewImages) {
+                this.previewImages[preview] = "";
+            }
+        },
+
         async submitImages() {
             if (this.updatedFiles()) {
                 this.loadingSaveImgs = true;
@@ -246,6 +260,7 @@ export default {
                         siteInfoStore.updateConstants(response.data.siteInfoData);
                         alertStore.addAlert('success', response.data.message);
                         MetaManager.setAllMeta();
+                        this.cleanFiles();
                     }
                 } catch (error) {
                     this.loadingSaveImgs = false;
@@ -287,5 +302,11 @@ export default {
 #workSchedule::placeholder {
     color: #b1b1b1 !important;
     font-size: 14px;
+}
+
+.alerta-cache {
+    padding: 0.50rem;
+    background-color: #cff4fc;
+    border-left: 0.25rem solid #9eeaf9;
 }
 </style>
