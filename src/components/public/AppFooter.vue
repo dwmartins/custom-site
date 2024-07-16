@@ -15,7 +15,7 @@
                 <div class="col-9 col-md-4 fs-7">
                     <div class="d-flex justify-content-center align-items-center h-100 mb-3 p-0">
                         <div class="d-flex flex-column gap-2 fs-7">
-                            <a v-if="siteInfoStore.constants.phone" class="link_outline_none text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp me-2"></i>{{ siteInfoStore.constants.phone }}</a>
+                            <a v-if="siteInfoStore.constants.phone" class="link_outline_none text-secondary" :class="siteInfoStore.constants.phoneIsWhatsApp == 'N' && 'ms-4'" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i v-if="siteInfoStore.constants.phoneIsWhatsApp == 'Y'" class="fa-brands fa-whatsapp me-2"></i>{{ siteInfoStore.constants.phone }}</a>
 
                             <a v-if="siteInfoStore.constants.email" class="link_outline_none text-secondary" :href="`mailto:${siteInfoStore.constants.email}`" target="_blank"><i class="fa-regular fa-envelope me-2"></i>{{ siteInfoStore.constants.email }}</a>
 

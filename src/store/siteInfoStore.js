@@ -5,6 +5,7 @@ export const siteInfoStore = reactive({
         webSiteName: "",
         email: "",
         phone: "",
+        phoneIsWhatsApp: "",
         city: "",
         state: "",
         address: "",

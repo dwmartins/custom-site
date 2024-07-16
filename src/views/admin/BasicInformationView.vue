@@ -22,7 +22,7 @@
                                 <span>{{ images.logoImage.name }}</span>
                             </div>
                         
-                            <input v-else @change="setImage($event, 'logoImage')" class="form-control custom_focus form-control-sm" type="file" :accept="acceptImg">
+                            <input v-else @change="setImage($event, 'logoImage')" class="form-control custom_focus form-control-sm text-secondary" type="file" :accept="acceptImg">
                             
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <span>{{ images.coverImage.name }}</span>
                             </div>
                         
-                            <input v-else @change="setImage($event, 'coverImage')" class="form-control custom_focus form-control-sm" type="file" :accept="acceptImg">
+                            <input v-else @change="setImage($event, 'coverImage')" class="form-control custom_focus form-control-sm text-secondary" type="file" :accept="acceptImg">
                             
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                 <span>{{ images.ico.name }}</span>
                             </div>
                         
-                            <input v-else @change="setImage($event, 'icon')" class="form-control custom_focus form-control-sm" type="file" :accept="acceptIcon">
+                            <input v-else @change="setImage($event, 'icon')" class="form-control custom_focus form-control-sm text-secondary" type="file" :accept="acceptIcon">
                             
                         </div>
                     </div>
@@ -79,13 +79,13 @@
                                 <span>{{ images.defaultImage.name }}</span>
                             </div>
                         
-                            <input v-else @change="setImage($event, 'defaultImage')" class="form-control custom_focus form-control-sm" type="file" :accept="acceptImg">
+                            <input v-else @change="setImage($event, 'defaultImage')" class="form-control custom_focus form-control-sm text-secondary" type="file" :accept="acceptImg">
                             
                         </div>
                     </div>
 
                     <div v-if="updatedFiles()" class="mb-3 alerta-cache">
-                        <p class="m-0" >Pode ser necessário <span class="fw-medium cursor_pointer">recarregar a página</span> ou até limpar o cache do navegador para visualizar as alterações nas imagens.</p>
+                        <p class="m-0" >Pode ser necessário <span class="fw-medium">recarregar a página</span> ou até limpar o cache do navegador para visualizar as alterações nas imagens.</p>
                     </div>
 
                     <div class="d-flex justify-content-end">
@@ -109,57 +109,108 @@
 
                 <div class="mb-3 col-md-4">
                     <label for="webSiteName" class="form-label">Nome do site:</label>
-                    <input v-model="basicInfo.webSiteName" type="text" class="form-control form-control-sm custom_focus" id="webSiteName">
+                    <input v-model="basicInfo.webSiteName" type="text" class="form-control form-control-sm custom_focus text-secondary" id="webSiteName">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="email" class="form-label">E-mail:</label>
-                    <input v-model="basicInfo.email" type="text" class="form-control form-control-sm custom_focus" id="email">
+                    <input v-model="basicInfo.email" type="text" class="form-control form-control-sm custom_focus text-secondary" id="email">
                 </div>
 
                 <div class="mb-3 col-md-4">
-                    <label for="phone" class="form-label">Telefone: <span class="opacity-75 fs-8">(WhatsApp)</span></label>
-                    <input v-model="basicInfo.phone" type="text" class="form-control form-control-sm custom_focus" id="phone">
+                    <label for="phone" class="form-label d-flex">Telefone: 
+                        <span class="ms-2 w-100 opacity-75 fs-8 d-flex h-100 align-items-center">
+                            ( WhatsApp
+                            <div class="ms-3 form-check form-switch d-flex align-items-center">
+                                <input v-model="basicInfo.phoneIsWhatsApp" class="form-check-input custom_focus cursor_pointer fs-6" type="checkbox" role="switch" id="whatsApp">
+                            </div> )
+                        </span>
+                    </label>
+                    <input v-model="basicInfo.phone" type="number" class="form-control form-control-sm custom_focus text-secondary" id="phone">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="workSchedule" class="form-label">Horário:</label>
-                    <input v-model="basicInfo.workSchedule" type="text" class="form-control form-control-sm custom_focus" id="workSchedule" placeholder="Ex: Segunda a sexta, das 8h00 aś 17h30">
+                    <input v-model="basicInfo.workSchedule" type="text" class="form-control form-control-sm custom_focus text-secondary" id="workSchedule" placeholder="Ex: Segunda a sexta, das 8h00 aś 17h30">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="city" class="form-label">Cidade:</label>
-                    <input v-model="basicInfo.city" type="text" class="form-control form-control-sm custom_focus" id="city">
+                    <input v-model="basicInfo.city" type="text" class="form-control form-control-sm custom_focus text-secondary" id="city">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="state" class="form-label">Estado:</label>
-                    <input v-model="basicInfo.state" type="text" class="form-control form-control-sm custom_focus" id="state">
+                    <input v-model="basicInfo.state" type="text" class="form-control form-control-sm custom_focus text-secondary" id="state">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="address" class="form-label">Endereço:</label>
-                    <input v-model="basicInfo.address" type="text" class="form-control form-control-sm custom_focus" id="address">
+                    <input v-model="basicInfo.address" type="text" class="form-control form-control-sm custom_focus text-secondary" id="address">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="instagram" class="form-label">Instagram:</label>
-                    <input v-model="basicInfo.instagram" type="text" class="form-control form-control-sm custom_focus" id="instagram">
+                    <input v-model="basicInfo.instagram" type="text" class="form-control form-control-sm custom_focus text-secondary" id="instagram">
                 </div>
 
                 <div class="mb-3 col-md-4">
                     <label for="facebook" class="form-label">Facebook:</label>
-                    <input v-model="basicInfo.facebook" type="text" class="form-control form-control-sm custom_focus" id="facebook">
+                    <input v-model="basicInfo.facebook" type="text" class="form-control form-control-sm custom_focus text-secondary" id="facebook">
                 </div>
 
                 <div class="mb-3 col-md-6">
                     <label for="description" class="form-label">Descrição: <span class="opacity-75 fs-8">(SEO)</span></label>
-                    <textarea v-model="basicInfo.description" name="description" id="description" rows="5" class="form-control custom_focus"></textarea>
+                    <textarea v-model="basicInfo.description" name="description" id="description" rows="5" class="form-control custom_focus text-secondary"></textarea>
                 </div>
 
                 <div class="mb-3 col-md-6">
-                    <label for="keywords" class="form-label">Palavras chaves:<span class="opacity-75 fs-8">(SEO)</span></label>
-                    <textarea name="keywords" v-model="basicInfo.keywords" id="keywords" rows="5" class="form-control custom_focus"></textarea>
+                    <label for="keywords" class="form-label">Palavras chaves:<span class="opacity-75 fs-8"> (SEO)</span></label>
+                    <textarea name="keywords" v-model="basicInfo.keywords" id="keywords" rows="5" class="form-control custom_focus text-secondary"></textarea>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button @click="submitBasicInfos()" type="button" class="btn btn-sm btn-primary" :disabled="loadingSaveInfos">
+                        <template v-if="!loadingSaveInfos">
+                            Salvar Alterações
+                        </template>
+                        <template v-else>
+                            <AppSpinnerLoading message="Aguarde..." color="text-white" />
+                        </template>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <form class="container-fluid shadow rounded-2 mb-5">
+            <div class="row shadow rounded-2 p-3">
+                <p class="custom_dark fs-7">Botão flutuante do WhatsApp</p>
+                <hr class="custom-hr-dark">
+
+                <p class="custom_dark fs-7">Ative e integre de forma simples e eficiente o botão flutuante de atendimento pelo WhatsApp em seu site.</p>
+
+                <div class="col-12">
+                    <div class="form-check form-switch">
+                        <input v-model="widgets.floatingButton.active" class="form-check-input custom_focus cursor_pointer" type="checkbox" role="switch" id="activateWhatsApp">
+                        <label class="form-label fs-7" for="activateWhatsApp">Ativar botão flutuante</label>
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <div class="form-check form-switch">
+                        <input v-model="widgets.floatingButton.useBasicInformationPhone" class="form-check-input custom_focus cursor_pointer" type="checkbox" role="switch" id="useBasicInformationPhone">
+                        <label class="form-label fs-7" for="useBasicInformationPhone">Usar telefone das informações básicas</label>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-3">
+                    <label for="button-position" class="form-label fs-7">Posicionamento do botão</label>
+                    <select class="form-select custom_focus form-select-sm text-secondary" id="button-position">
+                        <option value="left" :selected="widgets.floatingButton.position === 'left'">Esquerda</option>
+                        <option value="right" :selected="widgets.floatingButton.position === 'right'">Direita</option>
+                    </select>
+                </div>
+                <div v-if="!widgets.floatingButton.useBasicInformationPhone" class="col-12 col-sm-4 mb-3">
+                    <label for="whatsAppNumber" class="form-label fs-7">Telefone:</label>
+                    <input v-model="widgets.floatingButton.phone" type="number" class="form-control form-control-sm custom_focus text-secondary" id="whatsAppNumber">
                 </div>
 
                 <div class="d-flex justify-content-end">
@@ -221,6 +272,7 @@ export default {
                 webSiteName: siteInfoStore.constants.webSiteName,
                 email: siteInfoStore.constants.email,
                 phone: siteInfoStore.constants.phone,
+                phoneIsWhatsApp: siteInfoStore.constants.phoneIsWhatsApp === "Y" ? true : false,
                 city: siteInfoStore.constants.city,
                 state: siteInfoStore.constants.state,
                 address: siteInfoStore.constants.address,
@@ -230,9 +282,21 @@ export default {
                 description: siteInfoStore.constants.description,
                 keywords: siteInfoStore.constants.keywords,
             },
+            widgets: {
+                floatingButton: {
+                    active: false,
+                    useBasicInformationPhone: false,
+                    position: "left",
+                    phone: null
+                }
+            },
             loadingSaveImgs: false,
             loadingSaveInfos: false
         }
+    },
+
+    beforeCreate() {
+        // console.log(siteInfoStore.constants.phoneIsWhatsApp);
     },
 
     methods: {
@@ -357,8 +421,12 @@ export default {
 
         async submitBasicInfos() {
             this.loadingSaveInfos = true;
+
+            let data = {...this.basicInfo};
+            data.phoneIsWhatsApp = this.basicInfo.phoneIsWhatsApp ? "Y" : "N";
+
             try {
-                const response = await SiteInfoService.updateBasicInfos(this.basicInfo);
+                const response = await SiteInfoService.updateBasicInfos(data);
                 if(response) {
                     this.loadingSaveInfos = false;
                     siteInfoStore.updateConstants(response.data.siteInfoData);

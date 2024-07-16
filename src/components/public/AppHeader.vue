@@ -38,7 +38,7 @@
 
                 <div class="social-network d-flex gap-3 justify-content-center fs-3 text-center">
                     <a v-if="siteInfoStore.constants.instagram" class="text-secondary" :href="siteInfoStore.constants.instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a v-if="siteInfoStore.constants.phone" class="text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a v-if="siteInfoStore.constants.phone && siteInfoStore.constants.phoneIsWhatsApp == 'Y'" class="text-secondary" :href="`https://wa.me/${siteInfoStore.constants.phone}`" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
