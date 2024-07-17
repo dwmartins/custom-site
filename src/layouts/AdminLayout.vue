@@ -9,19 +9,19 @@
                 <li class="nav-item p-1">
                     <router-link class="nav-link" active-class="active-link" to="/app/dashboard"><i class="fa-solid fa-chart-line me-2"></i>Dashboard</router-link>
                 </li>
-                <li class="nav-item p-1" v-if="userStore.user.permissions.siteInfo.permission">
+                <li class="nav-item p-1" v-if="getPermissionsToPage('siteInfo')">
                     <router-link class="nav-link" active-class="active-link" to="/app/informacoes-basicas"><i class="fa-solid fa-gears me-2"></i>Informações Básicas</router-link>
                 </li>
-                <li class="nav-item p-1" v-if="userStore.user.permissions.content.permission">
+                <li class="nav-item p-1" v-if="getPermissionsToPage('content')">
                     <router-link class="nav-link" active-class="active-link" to="/app/portfolio"><i class="fa-solid fa-image me-2"></i>Portfolio</router-link>
                 </li>
-                <li class="nav-item p-1" v-if="userStore.user.permissions.content.permission">
+                <li class="nav-item p-1" v-if="getPermissionsToPage('content')">
                     <router-link class="nav-link" active-class="active-link" to="/app/projetos-selecionados"><i class="fa-solid fa-photo-film me-2"></i>Projetos Selecionados</router-link>
                 </li>
-                <li class="nav-item p-1" v-if="userStore.user.permissions.users.permission">
+                <li class="nav-item p-1" v-if="getPermissionsToPage('users')">
                     <router-link class="nav-link" active-class="active-link" to="/app/usuarios"><i class="fa-solid fa-users me-2"></i>Usuários</router-link>
                 </li>
-                <li class="nav-item p-1" v-if="userStore.user.permissions.emailSending.permission">
+                <li class="nav-item p-1" v-if="getPermissionsToPage('emailSending')">
                     <router-link class="nav-link" active-class="active-link" to="/app/configuracoes-email"><i class="fa-solid fa-envelope me-2"></i>Configurações de e-mail</router-link>
                 </li>
             </ul>
@@ -114,6 +114,20 @@ export default {
         logout() {
             AuthService.logout();
             this.$router.push('/');
+        },
+
+        getPermissionsToPage(page) {
+            if(userStore.user.role === "super") {
+                return true;
+            }
+
+            console.log(userStore.user.permissions[page]);
+
+            if(userStore.user.permissions[page].permission) {
+                return true;
+            }
+
+            return false;
         }
     }
 };

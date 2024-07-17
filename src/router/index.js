@@ -108,14 +108,21 @@ router.beforeEach((to, from, next) => {
 
 function checkPermissions(to, next) {
     const { requirePermission } = to.meta;
-    const permissions = AuthService.getPermissions();
-    const permission = permissions[requirePermission];
 
-    if (permission.permission) {
-        next();
+    const userLogged = AuthService.getUserLogged();
+    console.log(userLogged);
+    if(userLogged) {
+        const permission = userLogged.permissions ?? {};
+
+        if (userLogged.role === "super" || permission[requirePermission]?.permission) {
+            next();
+        } else {
+            alertStore.addAlert('error', 'Você não tem permissão para acessar essa área.');
+            next('/app/dashboard');
+        }
     } else {
-        alertStore.addAlert('error', 'Você não tem permissão para acessar essa área.');
-        next('/app/dashboard');
+        AuthService.logout();
+        next({ name: 'Login' });
     }
 }
 

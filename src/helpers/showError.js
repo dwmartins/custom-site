@@ -1,7 +1,8 @@
 import AuthService from "@/services/AuthService";
 import { alertStore } from "@/store/alertStore";
+import router from "@/router";
 
-export function showError(error, router = null) {
+export function showError(error) {
     console.error('ERROR', error);
 
     if(error.response.status && error.response.status === 401) {
@@ -37,6 +38,15 @@ export function showError(error, router = null) {
 
         alertStore.addAlert('error', error.response.data.message);
         return;
+    }
+
+    if(error.response.status && error.response.status === 403) {
+        if(error.response.data.invalidPermission) {
+            alertStore.addAlert('error', error.response.data.invalidPermission);
+            AuthService.logout();
+            router.push('/login');
+            return;
+        }
     }
 
     if(error.response.status === 500) {
