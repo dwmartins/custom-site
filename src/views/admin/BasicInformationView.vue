@@ -191,31 +191,31 @@
 
                 <div class="col-12">
                     <div class="form-check form-switch">
-                        <input v-model="widgets.floatingButton.active" class="form-check-input custom_focus cursor_pointer" type="checkbox" role="switch" id="activateWhatsApp">
+                        <input v-model="widgets.floatingButton.widget_data.active" class="form-check-input custom_focus cursor_pointer" type="checkbox" role="switch" id="activateWhatsApp">
                         <label class="form-label fs-7" for="activateWhatsApp">Ativar botão flutuante</label>
                     </div>
                 </div>
                 <div class="col-12 mb-3">
                     <div class="form-check form-switch">
-                        <input v-model="widgets.floatingButton.useBasicInformationPhone" class="form-check-input custom_focus cursor_pointer" type="checkbox" role="switch" id="useBasicInformationPhone">
+                        <input v-model="widgets.floatingButton.widget_data.useBasicInformationPhone" class="form-check-input custom_focus cursor_pointer" type="checkbox" role="switch" id="useBasicInformationPhone">
                         <label class="form-label fs-7" for="useBasicInformationPhone">Usar telefone das informações básicas</label>
                     </div>
                 </div>
                 <div class="col-12 col-sm-4 mb-3">
                     <label for="button-position" class="form-label fs-7">Posicionamento do botão</label>
                     <select class="form-select custom_focus form-select-sm text-secondary" id="button-position">
-                        <option value="left" :selected="widgets.floatingButton.position === 'left'">Esquerda</option>
-                        <option value="right" :selected="widgets.floatingButton.position === 'right'">Direita</option>
+                        <option value="left" :selected="widgets.floatingButton.widget_data.position === 'left'">Esquerda</option>
+                        <option value="right" :selected="widgets.floatingButton.widget_data.position === 'right'">Direita</option>
                     </select>
                 </div>
-                <div v-if="!widgets.floatingButton.useBasicInformationPhone" class="col-12 col-sm-4 mb-3">
+                <div v-if="!widgets.floatingButton.widget_data.useBasicInformationPhone" class="col-12 col-sm-4 mb-3">
                     <label for="whatsAppNumber" class="form-label fs-7">Telefone:</label>
-                    <input v-model="widgets.floatingButton.phone" type="number" class="form-control form-control-sm custom_focus text-secondary" id="whatsAppNumber">
+                    <input v-model="widgets.floatingButton.widget_data.phone" type="number" class="form-control form-control-sm custom_focus text-secondary" id="whatsAppNumber">
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <button @click="submitBasicInfos()" type="button" class="btn btn-sm btn-primary" :disabled="loadingSaveInfos">
-                        <template v-if="!loadingSaveInfos">
+                    <button @click="submitFLoatingButton()" type="button" class="btn btn-sm btn-primary" :disabled="loadingSaveFloatingButton">
+                        <template v-if="!loadingSaveFloatingButton">
                             Salvar Alterações
                         </template>
                         <template v-else>
@@ -239,11 +239,18 @@ import FileValidator from '@/validators/FileValidator';
 import SiteInfoService from '@/services/SiteInfoService';
 import { alertStore } from '@/store/alertStore';
 import MetaManager from '@/helpers/MetaManager';
+import { widgetStore } from '@/store/widgetStore';
+import WidgetService from '@/services/WidgetService';
 
 export default {
     name: 'BasicInformationView',
+
     components: {
         AppSpinnerLoading
+    },
+
+    created() {
+        this.getWidgetFloatingButton()
     },
 
     data() {
@@ -284,14 +291,21 @@ export default {
             },
             widgets: {
                 floatingButton: {
-                    active: false,
-                    useBasicInformationPhone: false,
-                    position: "left",
-                    phone: null
+                    id: null,
+                    widget_name: "",
+                    widget_data: {
+                        active: false,
+                        phone: "",
+                        position: "right",
+                        useBasicInformationPhone: false
+                    },
+                    createdAt: "",
+                    updatedAt: ""
                 }
             },
             loadingSaveImgs: false,
-            loadingSaveInfos: false
+            loadingSaveInfos: false,
+            loadingSaveFloatingButton: false
         }
     },
 
@@ -436,6 +450,31 @@ export default {
             } catch (error) {
                 this.loadingSaveInfos = false;
             }
+        },
+
+        async getWidgetFloatingButton() {
+            try {
+                const response = await WidgetService.getWidgets();
+
+                if(response.data) {
+                    widgetStore.widgets = [];
+
+                    response.data.forEach(widget => {
+                        widgetStore.addWidget(widget);
+                    });
+                }
+
+                widgetStore.widgetsLoaded = true;
+                
+                const widget = widgetStore.getWidgetByName('floatingButton');
+                this.widgets.floatingButton = { ...widget };
+            } catch (error) {
+                console.error('Erro ao buscar o widget do botão flutuante:', error);
+            }
+        },
+
+        async submitFLoatingButton() {
+            console.log('test');
         }
     }
 };

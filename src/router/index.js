@@ -95,7 +95,7 @@ router.beforeEach((to, from, next) => {
                     alertStore.addAlert('error', error.message);
                     next({ name: 'Login' });
                 } else {
-                    showError(error, router);
+                    showError(error);
                     next({ name: 'Home' });
                 }
             });
