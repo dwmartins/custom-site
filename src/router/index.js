@@ -110,7 +110,7 @@ function checkPermissions(to, next) {
     const { requirePermission } = to.meta;
 
     const userLogged = AuthService.getUserLogged();
-    console.log(userLogged);
+    
     if(userLogged) {
         const permission = userLogged.permissions ?? {};
 

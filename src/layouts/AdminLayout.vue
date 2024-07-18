@@ -121,8 +121,6 @@ export default {
                 return true;
             }
 
-            console.log(userStore.user.permissions[page]);
-
             if(userStore.user.permissions[page].permission) {
                 return true;
             }

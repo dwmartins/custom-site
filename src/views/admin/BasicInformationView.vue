@@ -203,7 +203,7 @@
                 </div>
                 <div class="col-12 col-sm-4 mb-3">
                     <label for="button-position" class="form-label fs-7">Posicionamento do botão</label>
-                    <select class="form-select custom_focus form-select-sm text-secondary" id="button-position">
+                    <select v-model="widgets.floatingButton.widget_data.position" class="form-select custom_focus form-select-sm text-secondary" id="button-position">
                         <option value="left" :selected="widgets.floatingButton.widget_data.position === 'left'">Esquerda</option>
                         <option value="right" :selected="widgets.floatingButton.widget_data.position === 'right'">Direita</option>
                     </select>
@@ -474,7 +474,18 @@ export default {
         },
 
         async submitFLoatingButton() {
-            console.log('test');
+            this.loadingSaveFloatingButton = true;
+
+            try {
+                const response = await WidgetService.saveWIdget(this.widgets.floatingButton);
+
+                if(response) {
+                    this.loadingSaveFloatingButton = false;
+                    alertStore.addAlert('success', response.data.message);
+                }
+            } catch (error) {
+                this.loadingSaveFloatingButton = false;
+            }
         }
     }
 };

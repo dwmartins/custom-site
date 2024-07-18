@@ -45,7 +45,6 @@ export default {
         getWidget() {
             const widget = widgetStore.getWidgetByName('floatingButton');
             this.widgetData = { ...widget };
-            console.log(this.widgetData);
         },
 
         getPosition() {
