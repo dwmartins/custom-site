@@ -1,11 +1,12 @@
 <template>
-    <a v-if="widgetData.widget_data.active" :href="`https://wa.me/${widgetData.widget_data.phone}`" :class="getPosition()" class="floatingButton" target="_blank">
+    <a v-if="widgetData.widget_data.active" :href="`https://wa.me/${getPhone()}`" :class="getPosition()" class="floatingButton" target="_blank">
         <img src="@/assets/img/widgets/whatsAppIcon.png" alt="Icon do WhatsApp">
     </a>
 </template>
 
 <script>
 import { widgetStore } from '@/store/widgetStore';
+import { siteInfoStore } from '@/store/siteInfoStore';
 
 export default {
     name: 'AppFloatingButton',
@@ -54,6 +55,10 @@ export default {
                     'floatingButton--left': this.widgetData.widget_data.position === 'left',
                 }
             }
+        },
+
+        getPhone() {
+            return this.widgetData.widget_data.useBasicInformationPhone ? siteInfoStore.constants.phone : this.widgetData.widget_data.phone
         }
     }
 }
@@ -62,18 +67,24 @@ export default {
 <style scoped>
 .floatingButton {
     position: fixed;
-    bottom: 15px;
+    bottom: 20px;
     width: 40px;
     height: 40px;
     object-fit: cover;
+    transition: 0.2s ease-in;
+}
+
+.floatingButton:hover {
+    width: 45px;
+    height: 45px;
 }
 
 .floatingButton--right {
-    right: 15px;
+    right: 20px;
 }
 
 .floatingButton--left {
-    left: 15px;
+    left: 20px;
 }
 
 .floatingButton img{
