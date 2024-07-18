@@ -7,6 +7,7 @@ import DashBoardView from '@/views/admin/DashBoardView.vue';
 import BasicInformationView from '@/views/admin/BasicInformationView.vue'
 import PortfolioView from '@/views/admin/PortfolioView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
+import EmailConfigView from '@/views/admin/EmailConfigView.vue';
 import AuthService from '@/services/AuthService';
 import { alertStore } from '@/store/alertStore';
 import { loadingPageStore } from '@/store/loadingPageStore';
@@ -56,6 +57,12 @@ const routes = [
                 name: 'Usuarios',
                 component: UsersView,
                 meta: {requirePermission: 'users' }
+            },
+            {
+                path: 'configuracoes-email',
+                name: 'Configuracoes-email',
+                component: EmailConfigView,
+                meta: {requirePermission: 'emailSending'}
             }
         ]
     },
