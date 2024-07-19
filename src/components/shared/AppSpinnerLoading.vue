@@ -1,8 +1,10 @@
 <template>
-    <div id="appSpinnerLoading" class="d-flex align-items-center gap-2">
-        <div class="spinner-border custom_spinner_btn" :class="color" role="status"></div>
-        <span :class="color">{{ message }}</span>
-    </div>  
+    <div class="d-flex align-items-center gap-2">
+        <div id="appSpinnerLoading">
+            <div class="spinner-border" :class="[color, width]" role="status"></div>
+        </div>  
+        <p class="m-0 fs-6" :class="color">{{ message }}</p>
+    </div>
 </template>
 
 <script>
@@ -17,14 +19,24 @@
                 type: String,
                 required: false,
                 default: 'text-primary'
+            },
+            width: {
+                type: String,
+                required: false,
+                default: 'small'
             }
         }
     }
 </script>
 
 <style scoped>
-.custom_spinner_btn {
+.small {
     height: 22px;
     width: 22px;
+}
+
+.big {
+    height: 30px;
+    width: 30px; 
 }
 </style>

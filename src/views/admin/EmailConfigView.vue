@@ -1,17 +1,28 @@
 <template>
     <section id="emailConfigView" class="d-flex flex-column align-items-center">
-        <div>
+        <div class="w-100" >
             <h5 class="custom_dark mb-3">Configurações de e-mail</h5>
 
-            <form @submit.prevent="submitConfigsEmail()" class="container-fluid shadow rounded-2 mb-5">
+            <div v-if="loadingData" class="alert alert-info fadeIn p-2" role="alert">
+                <AppSpinnerLoading message="Buscando configurações de e-mail..." color="text-primary-emphasis" width="big" />
+            </div>  
+
+            <form v-if="!loadingData" @submit.prevent="submitConfigsEmail()" class="container-fluid shadow rounded-2 mb-5 show">
                 <div class="container-fluid p-3">
                     <p class="custom_dark fs-7" >Propriedades do servidor SMTP</p>
                     <hr class="custom-hr-dark">
 
                     <div class="mb-3 d-flex justify-content-end">
-                        <span class="form-label text-secondary me-2" >Ativado</span> 
+                        <span class="form-label text-secondary me-2" >
+                            <template v-if="!emailConfig.activated">
+                                Ativar
+                            </template>
+                            <template v-if="emailConfig.activated">
+                                Desativar
+                            </template>
+                        </span> 
                         <label class="switch">
-                            <input v-model="emailConfig.activated" type="checkbox">
+                            <input v-model="emailConfig.activated" @change="activeConfigs()" type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -68,6 +79,8 @@
  
 <script>
 import AppSpinnerLoading from '@/components/shared/AppSpinnerLoading.vue';
+import EmailConfigService from '@/services/EmailConfigService';
+import { alertStore } from '@/store/alertStore';
 
 export default {
     name: 'EmailConfigView',
@@ -78,7 +91,7 @@ export default {
     data() {
         return {
             emailConfig: {
-                id: null,
+                id: 0,
                 server: "",
                 emailAddress: "",
                 username: "",
@@ -89,12 +102,63 @@ export default {
                 createdAt: "",
                 updatedAt: ""
             },
-            loadingSubmit: false
+            loadingSubmit: false,
+            loadingData: false
         }
     },
+
+    beforeMount() {
+        this.getConfigs();
+    },
+
     methods: {
-        submitConfigsEmail() {
-            console.log(this.emailConfig);
+        async getConfigs() {
+            this.loadingData = true;
+            try {
+                const response = await EmailConfigService.getEmailConfig();
+                this.loadingData = false;
+                
+                if(response.data && Object.keys(response.data).length) {
+                    this.emailConfig = {...response.data};
+                }
+            } catch (error) {
+                this.loadingData = false;
+                console.error("Falha ao buscar as configurações de e-mail", error);
+            }
+        },
+
+        async submitConfigsEmail() {
+            let data = {...this.emailConfig};
+            data.activated = this.emailConfig ? "Y" : "N";
+            this.loadingSubmit = true;
+            try {  
+                const response = await EmailConfigService.save(data);
+                this.loadingSubmit = false;
+
+                if(response) {
+                    alertStore.addAlert('success', response.data.message);
+                }
+            } catch (error) {
+                this.loadingSubmit = false;
+                console.error("Falha ao salvar as configurações de e-mail", error);
+            }
+        },
+
+        async activeConfigs() {
+
+            if(!this.emailConfig.id) {
+                return;
+            }
+
+            try {
+                const response = await EmailConfigService.activeConfigs(this.emailConfig);
+
+                if(response) {
+                    alertStore.addAlert('success', response.data.message);
+                }
+            } catch (error) {
+                console.error('Falha ao alterar o status das configurações de e-mail', error);
+            }
         }
     }
 };

@@ -1,6 +1,6 @@
 <template>
     <section id="loginView" class="container-fluid bg-primary">
-        <form @submit.prevent="submitLogin()" class="bg-ice-white px-3 py-5 px-sm-4 w-100 rounded shadow mx-1 show-animation-2">
+        <form @submit.prevent="submitLogin()" class="bg-ice-white px-3 py-5 px-sm-4 w-100 rounded shadow mx-1 show">
             <h4 class="text-center py-3 custom_dark">Painel</h4>
 
             <div class="mb-4 position-relative">
