@@ -2,7 +2,7 @@
     <section id="basicInformationView">
         <h5 class="custom_dark mb-3">Informações básicas</h5>
 
-        <form class="container-fluid shadow rounded-2 mb-5">
+        <form class="container-fluid shadow rounded-2 mb-5 show">
             <div class="row p-3">
                 <p class="custom_dark fs-7" >Imagens do site</p>
                 <hr class="custom-hr-dark">
@@ -102,7 +102,7 @@
             </div>
         </form>
 
-        <form class="container-fluid shadow rounded-2 mb-5">
+        <form class="container-fluid shadow rounded-2 mb-5 show">
             <div class="row shadow rounded-2 p-3">
                 <p class="custom_dark fs-7">Informações básicas</p>
                 <hr class="custom-hr-dark">
@@ -182,7 +182,7 @@
             </div>
         </form>
 
-        <form class="container-fluid shadow rounded-2 mb-5">
+        <form class="container-fluid shadow rounded-2 mb-5 show">
             <div class="row shadow rounded-2 p-3">
                 <p class="custom_dark fs-7">Botão flutuante do WhatsApp</p>
                 <hr class="custom-hr-dark">
