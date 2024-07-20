@@ -21,6 +21,11 @@ class AuthService {
         return user;
     }
 
+    getBearer() {
+        const user = this.getUserLogged();
+        return `Bearer userId:${user.id} token:${user.token}`
+    }
+
     setUserLogged(userData) {
         userStore.updateUserLogged(userData);
         localStorage.setItem('userData', JSON.stringify(userData));
