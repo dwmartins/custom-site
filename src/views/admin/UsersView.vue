@@ -18,6 +18,7 @@
                                 <el-checkbox @change="selectAll($event)" size="large" />
                             </th>
                             <th class="custom_dark">Nome</th>
+                            <th class="custom_dark">Tipo</th>
                             <th class="custom_dark">E-mail</th>
                             <th class="text-center custom_dark">Status</th>
                             <th class="text-center custom_dark">Ações</th>
@@ -33,6 +34,9 @@
                                     alt="Usuário">
                                 {{ user.name }}
                             </td>
+                            <td class="text-secondary fs-7">
+                                {{ user.role == "admin" ? "Administrador" : "Super" }}
+                            </td>
                             <td class="text-secondary"><span class="user_email">{{ user.email }}</span></td>
                             <td class="text-secondary text-center">
                                 <span class="text-white rounded-2 px-2 fs-8"
@@ -41,6 +45,7 @@
                                 </span>
                             </td>
                             <td class="text-center">
+                                <i class="fa-solid fa-eye text-secondary me-3 cursor_pointer"></i>
                                 <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
                                 <i @click="dialogs.deleteUser = true, userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
                             </td>
@@ -324,7 +329,7 @@ export default {
 }
 
 table {
-    min-width: 510px;
+    min-width: 732px;
 }
 
 .user-photo {
