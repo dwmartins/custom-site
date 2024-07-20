@@ -4,7 +4,6 @@
 
 * {
     font-family: 'Poppins', sans-serif;
-    color: #303F4E;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -207,3 +206,11 @@ input:checked+.slider:before {
 }
 
 /* End Toggle Switch */
+
+/* Dialogs */
+.dialog-delete-user, .el-dialog {
+    width: 95% !important;
+    max-width: 400px !important;
+}
+
+/* End Dialogs */

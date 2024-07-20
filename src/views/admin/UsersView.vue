@@ -12,8 +12,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <input @change="selectAll()" class="form-check-input mt-0 custom_focus cursor_pointer"
-                                    type="checkbox">
+                                <el-checkbox @change="selectAll($event)" size="large" />
                             </th>
                             <th>Nome</th>
                             <th>E-mail</th>
@@ -24,8 +23,7 @@
                     <tbody>
                         <tr v-for="user in paginatedUsers" :key="user.id">
                             <th>
-                                <input v-model="user.selected" class="form-check-input mt-0 custom_focus cursor_pointer"
-                                    type="checkbox">
+                                <el-checkbox size="large" v-model="user.selected" />
                             </th>
                             <td class="text-secondary">
                                 <img class="user-photo me-1" :src="user.photo ? user.photo : defaultImgUser"
@@ -41,35 +39,38 @@
                             </td>
                             <td class="text-center">
                                 <i class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
-                                <i class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
+                                <i @click="dialogs.deleteUser = true, userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <!-- Bootstrap Pagination Controls -->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end">
-                        <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                            <a class="page-link" @click.prevent="previousPage">Anterior</a>
-                        </li>
-                        <li class="page-item" v-for="page in totalPages" :key="page"
-                            :class="{ active: page === currentPage }">
-                            <a class="page-link" @click.prevent="changePage(page)">{{ page }}</a>
-                        </li>
-                        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                            <a class="page-link" @click.prevent="nextPage">Proximo</a>
-                        </li>
-                    </ul>
-                </nav>
+
+                <div class="d-flex justify-content-end">
+                    <el-pagination size="small" background layout="prev, pager, next" :total="users.length"
+                        :page-size="usersPerPage" @current-change="handlePageChange" class="mt-4" />
+                </div>
             </div>
         </div>
     </section>
+
+    <el-dialog  class="dialog-delete-user" v-model="dialogs.deleteUser" title="Excluir usuário">
+        <p>Tem certeza de que deseja excluir este usuário? Esta ação é permanente e não pode ser desfeita.</p>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="dialogs.deleteUser = false">Cancelar</el-button>
+                <el-button type="danger" @click="deleteUser()">
+                    Confirmar
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <script>
 import AppSpinnerLoading from '@/components/shared/AppSpinnerLoading.vue';
 import UserService from '@/services/UserService';
-import defaultImgUser from '@/assets/img/default/user.png'
+import defaultImgUser from '@/assets/img/default/user.png';
+import { ElNotification } from 'element-plus'
 
 export default {
     name: 'UsersView',
@@ -81,9 +82,13 @@ export default {
         return {
             defaultImgUser,
             users: [],
+            userToDelete: {},
             currentPage: 1,
             usersPerPage: 8,
-            loadingUsers: false
+            loadingUsers: false,
+            dialogs: {
+                deleteUser: false
+            }
         }
     },
 
@@ -113,7 +118,6 @@ export default {
 
                 if(response) {
                     this.users = response.data;
-                    console.log(this.users);
                 }
             } catch (error) {
                 console.error('Falha ao buscar os usuários', error);
@@ -121,30 +125,39 @@ export default {
             }
         },
 
-        nextPage() {
-            if (this.currentPage < this.totalPages) {
-                this.currentPage++;
-            }
-        },
-
-        previousPage() {
-            if (this.currentPage > 1) {
-                this.currentPage--;
-            }
-        },
-
-        changePage(page) {
+        handlePageChange(page) {
             this.currentPage = page;
         },
 
-        selectAll() {
+        selectAll(event) {
             this.users.forEach(user => {
-                user.selected = user.selected ? false : true;
+                event ? user.selected = true : user.selected = false;
             });
         },
 
-        teste() {
-            console.log(this.users);
+        async deleteUser() {
+            try {
+                const response = await UserService.deleteUser(this.userToDelete.id);
+                if(response) {
+                    this.dialogs.deleteUser = false;
+
+                    const index = this.users.findIndex(user => user.id === this.userToDelete.id);
+                    if(index !== -1) {
+                        this.users.splice(index, 1);
+                    }
+
+                    ElNotification({
+                        title: 'Sucesso',
+                        message: response.data.message,
+                        type: 'error',
+                    })
+                    
+                    // alertStore.addAlert('success', response.data.message);
+                }
+            } catch (error) {
+                this.dialogs.deleteUser = false;
+                console.error('Falha ao deletar o usuário', error);
+            }
         }
     }
 };
