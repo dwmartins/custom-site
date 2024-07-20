@@ -121,7 +121,7 @@ function checkPermissions(to, next) {
     if(userLogged) {
         const permission = userLogged.permissions ?? {};
 
-        if (userLogged.role === "super" || permission[requirePermission]?.permission) {
+        if (userLogged.role === "super" || userLogged.role === "support" || permission[requirePermission]?.permission) {
             next();
         } else {
             alertStore.addAlert('error', 'Você não tem permissão para acessar essa área.');

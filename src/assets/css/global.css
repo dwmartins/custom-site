@@ -208,9 +208,20 @@ input:checked+.slider:before {
 /* End Toggle Switch */
 
 /* Dialogs */
-.dialog-delete-user, .el-dialog {
+.dialog-delete-user {
     width: 95% !important;
     max-width: 400px !important;
+}
+
+.dialog-new-user {
+    width: 95% !important;
+    max-width: 700px !important;
+}
+
+.dialog-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: end;
 }
 
 /* End Dialogs */

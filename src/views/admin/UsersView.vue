@@ -8,16 +8,19 @@
             </div>
 
             <div v-if="!loadingUsers" class="base_table overflow-x-auto shadow rounded-2 mb-5 show p-3 w-100">
+                <div class="d-flex justify-content-end">
+                    <el-button @click="openModal('newUser')" type="primary">Novo<i class="fa-solid fa-user-plus ms-2"></i></el-button>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>
                                 <el-checkbox @change="selectAll($event)" size="large" />
                             </th>
-                            <th>Nome</th>
-                            <th>E-mail</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Ações</th>
+                            <th class="custom_dark">Nome</th>
+                            <th class="custom_dark">E-mail</th>
+                            <th class="text-center custom_dark">Status</th>
+                            <th class="text-center custom_dark">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,7 +41,7 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <i class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
+                                <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
                                 <i @click="dialogs.deleteUser = true, userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
                             </td>
                         </tr>
@@ -47,7 +50,7 @@
 
                 <div class="d-flex justify-content-end">
                     <el-pagination size="small" background layout="prev, pager, next" :total="users.length"
-                        :page-size="usersPerPage" @current-change="handlePageChange" class="mt-4" />
+                        :page-size="pagination.usersPerPage" @current-change="handlePageChange" class="mt-4" />
                 </div>
             </div>
         </div>
@@ -64,18 +67,85 @@
             </div>
         </template>
     </el-dialog>
+
+    <el-dialog  class="dialog-new-user" v-model="dialogs.userInfo.active" :title="dialogs.userInfo.label">
+        <form @submit.prevent="submitForm(dialogs.userInfo.action)" class="container-fluid">
+            <div class="mb-2 d-flex justify-content-end align-items-center">
+                <el-switch 
+                    v-model="user.active"
+                    :active-text="user.active ? 'Ativo' : 'Inativo'"
+                />
+            </div>
+
+            <div class="row">
+                <div class="mb-2 col-sm-4">
+                    <label for="name" class="form-label">Nome:</label>
+                    <input v-model="user.name" type="text" class="form-control form-control-sm custom_focus text-secondary" id="name">
+                </div>
+
+                <div class="mb-2 col-sm-4">
+                    <label for="lastName" class="form-label">Sobrenome:</label>
+                    <input v-model="user.lastName" type="text" class="form-control form-control-sm custom_focus text-secondary" id="lastName">
+                </div>
+
+                <div class="mb-2 col-sm-4">
+                    <label for="email" class="form-label">E-mail:</label>
+                    <input v-model="user.email" type="text" class="form-control form-control-sm custom_focus text-secondary" id="email">
+                </div>
+
+                <div class="mb-2 col-sm-4">
+                    <label for="password" class="form-label">Senha:</label>
+                    <el-input
+                        v-model="user.password"
+                        type="password"
+                        show-password
+                    />
+                </div>
+
+                <div class="mb-2 col-sm-4 d-flex flex-column">
+                    <label for="role" class="form-label">Tipo:</label>
+
+                    <el-select v-model="user.role" id="role">
+                        <el-option label="Administrador" value="admin" :selected="user.role === 'admin'" />
+                        <el-option label="Super" value="super" :selected="user.role === 'super'" />
+                    </el-select>
+                </div>
+
+                <el-collapse class="mt-3" v-if="user.role === 'admin'">
+                    <el-collapse-item title="Permissões">
+                        <div class="d-flex flex-wrap">
+                            <el-checkbox
+                                v-for="permission in user.permissions"
+                                :key="permission.label"  
+                                :label="permission.label" 
+                                v-model="permission.permission"
+                                size="large" 
+                            />
+                        </div>
+                    </el-collapse-item>
+                </el-collapse>
+            </div>
+            <div class="dialog-footer">
+                <el-button @click="dialogs.userInfo.active = false" :disabled="isLoading.userInfo">Cancelar</el-button>
+                <el-button native-type="submit" type="primary" :loading="isLoading.userInfo">
+                    {{ isLoading.userInfo ? 'Aguarde...' : dialogs.userInfo.buttonText }}
+                </el-button>
+            </div>
+        </form>
+    </el-dialog>
 </template>
 
 <script>
 import AppSpinnerLoading from '@/components/shared/AppSpinnerLoading.vue';
 import UserService from '@/services/UserService';
 import defaultImgUser from '@/assets/img/default/user.png';
-import { ElNotification } from 'element-plus'
+import { User } from '@element-plus/icons-vue';
+import { showAlert } from '@/helpers/showAlert';
 
 export default {
     name: 'UsersView',
     components: {
-        AppSpinnerLoading
+        AppSpinnerLoading,
     },
 
     data() {
@@ -83,11 +153,52 @@ export default {
             defaultImgUser,
             users: [],
             userToDelete: {},
-            currentPage: 1,
-            usersPerPage: 8,
+            defaultUser: {
+                name: "",
+                lastName: "",
+                email: "",
+                password: "",
+                role: "admin",
+                active: false,
+                permissions: {
+                    users: {
+                        permission: false,
+                        label: "Usuários"
+                    },
+                    content: {
+                        permission: false,
+                        label: "Conteúdos do site"
+                    },
+                    siteInfo: {
+                        permission: true,
+                        label: "Informações do site"
+                    },
+                    emailSending: {
+                        permission: false,
+                        label: "Configurações de e-mail"
+                    }
+                }
+            },
+            user: {},
+            pagination: {
+                currentPage: 1,
+                usersPerPage: 8
+            },
             loadingUsers: false,
             dialogs: {
-                deleteUser: false
+                deleteUser: false,
+                userInfo: {
+                    active: false,
+                    action: "",
+                    label: "",
+                    buttonText: ""
+                }
+            },
+            icons: {
+                User
+            },
+            isLoading: {
+                userInfo: false
             }
         }
     },
@@ -102,8 +213,8 @@ export default {
         },
 
         paginatedUsers() {
-            const start = (this.currentPage - 1) * this.usersPerPage;
-            const end = start + this.usersPerPage;
+            const start = (this.pagination.currentPage - 1) * this.pagination.usersPerPage;
+            const end = start + this.pagination.usersPerPage;
             return this.users.slice(start, end);
         }
     },
@@ -126,7 +237,7 @@ export default {
         },
 
         handlePageChange(page) {
-            this.currentPage = page;
+            this.pagination.currentPage = page;
         },
 
         selectAll(event) {
@@ -146,17 +257,61 @@ export default {
                         this.users.splice(index, 1);
                     }
 
-                    ElNotification({
-                        title: 'Sucesso',
-                        message: response.data.message,
-                        type: 'error',
-                    })
-                    
-                    // alertStore.addAlert('success', response.data.message);
+                    showAlert('success', 'Sucesso', response.data.message);
                 }
             } catch (error) {
                 this.dialogs.deleteUser = false;
                 console.error('Falha ao deletar o usuário', error);
+            }
+        },
+
+        openModal(action, user = null) {
+            switch (action) {
+                case 'newUser':
+                    this.dialogs.userInfo.action = "newUser";
+                    this.dialogs.userInfo.label = "Novo usuário";
+                    this.dialogs.userInfo.buttonText = "Salvar";
+                    break;
+                case 'updateUser':
+                    this.dialogs.userInfo.action = "updateUser";
+                    this.dialogs.userInfo.label = "Atualizar usuário";
+                    this.dialogs.userInfo.buttonText = "Atualizar";
+                    break;
+            
+                default:
+                    break;
+            } 
+
+            this.user = {...this.defaultUser};
+
+            if(user) {
+                this.user = {...user};
+                this.user.active = user.active == "Y" ? true : false;
+                console.log(user)
+            }
+
+            this.dialogs.userInfo.active = true;
+        },
+
+        async submitForm(action) {
+            if(action === 'newUser') {
+                this.isLoading.userInfo = true;
+
+                try {
+                    const response = await UserService.newUser(this.user);
+                    this.isLoading.userInfo = false;
+                    this.dialogs.userInfo.active = false;
+
+                    if(response) {
+                        showAlert('success', 'Sucesso', response.data.message);
+                        this.users.push({ ...response.data.userData });
+                    }
+
+                    return;
+                } catch (error) {
+                    this.isLoading.userInfo = false;
+                    console.error('Falha ao criar o usuário.', error);
+                }
             }
         }
     }

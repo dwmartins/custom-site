@@ -117,7 +117,7 @@ export default {
         },
 
         getPermissionsToPage(page) {
-            if(userStore.user.role === "super") {
+            if(userStore.user.role === "super" || userStore.user.role === "support") {
                 return true;
             }
 
