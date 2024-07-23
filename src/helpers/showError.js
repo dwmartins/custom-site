@@ -49,6 +49,11 @@ export function showError(error) {
         return;
     }
 
+    if(error.response.status && error.response.status === 409) {
+        showAlert('error', 'Invalido', error.response.data.message);
+        return;
+    }
+
     if(error.response.status && error.response.status === 403) {
         if(error.response.data.invalidPermission) {
             showAlert('error', 'Erro', error.response.data.invalidPermission);
