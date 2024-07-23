@@ -444,7 +444,10 @@ export default {
 
                     if(response) {
                         showAlert('success', 'Sucesso', response.data.message);
-                        this.users.push({ ...response.data.userData });
+                        let userCreated = response.data.userData;
+                        delete userCreated.password;
+
+                        this.users.push({ ...userCreated });
                         this.emptyUsers = !this.users.length ? true : false;
                     }
 
