@@ -13,7 +13,18 @@
 
             <div v-else-if="!loadingUsers" class="base_table overflow-x-auto shadow rounded-2 mb-5 show p-3 w-100">
 
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end gap-2">
+                    <el-dropdown v-if="usersSelected.length">
+                        <el-button>
+                            Ações<i class="fa-solid fa-chevron-down ms-2"></i>
+                        </el-button>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item @click="openModalDelete(true)" class="text-danger">Deletar usuários</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+
                     <el-button @click="openModal('newUser')" type="primary">Novo<i class="fa-solid fa-user-plus ms-2"></i></el-button>
                 </div>
 
@@ -65,7 +76,7 @@
                         <tbody>
                             <tr v-for="user in paginatedUsers" :key="user.id">
                                 <th>
-                                    <el-checkbox size="large" v-model="user.selected" />
+                                    <el-checkbox size="large" v-model="user.selected" @change="setUserSelected(user)"/>
                                 </th>
                                 <td class="text-secondary">
                                     <img class="user-photo me-1" :src="user.photo ? user.photo : defaultImgUser"
@@ -85,7 +96,7 @@
                                 <td class="text-center">
                                     <i class="fa-solid fa-eye text-secondary me-3 cursor_pointer"></i>
                                     <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
-                                    <i @click="dialogs.deleteUser = true, userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
+                                    <i @click="openModalDelete(), userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -105,13 +116,14 @@
         </div>
     </section>
 
-    <el-dialog  class="dialog-delete-user" v-model="dialogs.deleteUser" title="Excluir usuário">
-        <p>Tem certeza de que deseja excluir este usuário? Esta ação é permanente e não pode ser desfeita.</p>
+    <el-dialog  class="dialog-delete-user" v-model="dialogs.deleteUser.active" :title="dialogs.deleteUser.multiples ? 'Excluir usuários' : 'Excluir usuário'">
+        <p v-if="dialogs.deleteUser.multiples">Tem certeza que deseja excluir os usuários selecionados? Esta ação é permanente e não pode ser desfeita.</p>
+        <p v-else>Tem certeza de que deseja excluir este usuário? Esta ação é permanente e não pode ser desfeita.</p>
         <template #footer>
             <div class="dialog-footer">
-                <el-button @click="dialogs.deleteUser = false" :disabled="isLoading.deleteUser">Cancelar</el-button>
-                <el-button type="danger" @click="deleteUser()" :loading="isLoading.deleteUser">
-                    {{ isLoading.deleteUser ? "Aguarde" : "Confirmar" }}
+                <el-button @click="dialogs.deleteUser.active = false" :disabled="isLoading.deleteUser">Cancelar</el-button>
+                <el-button type="danger" @click="deleteUser(dialogs.deleteUser.multiples)" :loading="isLoading.deleteUser">
+                    {{ isLoading.deleteUser? "Aguarde" : "Confirmar" }}
                 </el-button>
             </div>
         </template>
@@ -203,6 +215,7 @@ export default {
             users: [],
             filteredUsers: [],
             userToDelete: {},
+            usersSelected: [],
             defaultUser: {
                 name: "",
                 lastName: "",
@@ -236,7 +249,10 @@ export default {
             },
             loadingUsers: false,
             dialogs: {
-                deleteUser: false,
+                deleteUser: {
+                    active: false,
+                    multiples: false,
+                },
                 userInfo: {
                     active: false,
                     action: "",
@@ -300,16 +316,34 @@ export default {
         selectAll(event) {
             this.users.forEach(user => {
                 event ? user.selected = true : user.selected = false;
+                this.setUserSelected(user);
             });
         },
 
-        async deleteUser() {
+        setUserSelected(userSelected) {
+            if(userSelected.selected) {
+                this.usersSelected.push(userSelected);
+            } else {
+                const index = this.usersSelected.findIndex(user => user.id === userSelected.id);
+
+                if(index !== -1) {
+                    this.usersSelected.splice(index, 1);
+                }
+            }
+        },
+
+        async deleteUser(multiples = false) {
+            if(multiples) {
+                await this.deleteMultiples();
+                return;
+            }
+
             this.isLoading.deleteUser = true;
             try {
                 const response = await UserService.deleteUser(this.userToDelete.id);
                 this.isLoading.deleteUser = false;
                 if(response) {
-                    this.dialogs.deleteUser = false;
+                    this.dialogs.deleteUser.active = false;
 
                     const index = this.users.findIndex(user => user.id === this.userToDelete.id);
                     if(index !== -1) {
@@ -320,8 +354,45 @@ export default {
                 }
             } catch (error) {
                 this.isLoading.deleteUser = false;
-                this.dialogs.deleteUser = false;
+                this.dialogs.deleteUser.active = false;
                 console.error('Falha ao deletar o usuário', error);
+            }
+        },
+
+        async deleteMultiples() {
+            this.isLoading.deleteUser = true;
+            try {
+                let ids = [];
+
+                for(const user of this.usersSelected) {
+                    ids.push(user.id);
+                }
+
+                try {
+                    const response = await UserService.deleteMultiples({ids: ids});
+                    this.isLoading.deleteUser = false;
+                    this.usersSelected = [];
+                    
+                    if(response) {
+                        this.dialogs.deleteUser.active = false;
+
+                        for(const id of ids) {
+                            const index = this.users.findIndex(user => user.id === id);
+
+                            if(index !== -1) {
+                                this.users.splice(index, 1);
+                            }
+                        }
+                    }
+
+                    showAlert('success', 'Sucesso', response.data.message);
+                } catch (error) {
+                    this.isLoading.deleteUser = false;
+                    this.dialogs.deleteUser.active = false;
+                }
+
+            } catch (error) {
+                console.error('Falha ao deletar os usuários', error);
             }
         },
 
@@ -351,6 +422,11 @@ export default {
             }
 
             this.dialogs.userInfo.active = true;
+        },
+
+        openModalDelete(multiples = false) {
+            this.dialogs.deleteUser.multiples = multiples ? true : false;
+            this.dialogs.deleteUser.active = true;
         },
 
         async submitForm(action) {
