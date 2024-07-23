@@ -66,6 +66,22 @@ class UserService {
             throw error;
         }
     }
+
+    async updateUser(userData) {
+        const user = AuthService.validateLoggedUser();
+        if(!user) return false;
+
+        try {
+            return await axios.put(`/user/`, userData,{
+                headers: {
+                    'Authorization': AuthService.getBearer()
+                }
+            }) 
+        } catch (error) {
+            showError(error);
+            throw error;
+        }
+    }
 }
 
 export default new UserService();

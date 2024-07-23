@@ -444,10 +444,8 @@ export default {
 
                     if(response) {
                         showAlert('success', 'Sucesso', response.data.message);
-                        let userCreated = response.data.userData;
-                        delete userCreated.password;
 
-                        this.users.push({ ...userCreated });
+                        this.users.push({ ...response.data.userData });
                         this.emptyUsers = !this.users.length ? true : false;
                     }
 
@@ -455,6 +453,31 @@ export default {
                 } catch (error) {
                     this.isLoading.userInfo = false;
                     console.error('Falha ao criar o usuário.', error);
+                }
+            } else if(action === 'updateUser') {
+                this.isLoading.userInfo = true;
+
+                try {
+                    const user = {...this.user}
+                    user.active = this.user.active ? "Y" : "N";
+
+                    const response = await UserService.updateUser(user); 
+                    this.isLoading.userInfo = false;
+                    this.dialogs.userInfo.active = false;
+
+                    if(response) {
+                        showAlert('success', 'Sucesso', response.data.message);
+
+                        const index = this.users.findIndex(searchUser => searchUser.id === user.id);
+
+                        if (index !== -1) {
+                            this.users.splice(index, 1, user);
+                        }
+                    }
+
+                } catch (error) {
+                    this.isLoading.userInfo = false;
+                    console.error('Falha ao atualizar o usuário.', error);
                 }
             }
         },
