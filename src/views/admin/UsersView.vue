@@ -154,7 +154,7 @@
                     <input v-model="user.email" type="text" class="form-control form-control-sm custom_focus text-secondary" id="email">
                 </div>
 
-                <div class="mb-2 col-sm-4">
+                <div v-if="dialogs.userInfo.action !== 'updateUser'" class="mb-2 col-sm-4">
                     <label for="password" class="form-label">Senha:</label>
                     <el-input
                         v-model="user.password"
@@ -170,6 +170,15 @@
                         <el-option label="Administrador" value="admin" :selected="user.role === 'admin'" />
                         <el-option label="Super" value="super" :selected="user.role === 'super'" />
                     </el-select>
+                </div>
+
+                <div v-if="dialogs.userInfo.action === 'updateUser'" class="mb-2 col-sm-4">
+                    <label for="newPassword" class="form-label">Nova Senha:</label>
+                    <el-input
+                        v-model="user.newPassword"
+                        type="newPassword"
+                        show-password
+                    />
                 </div>
 
                 <el-collapse class="mt-3" v-if="user.role === 'admin'">
