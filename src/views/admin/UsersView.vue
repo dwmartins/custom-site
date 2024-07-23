@@ -11,7 +11,7 @@
                 <el-button @click="openModal('newUser')" size="small" type="primary">Adicionar<i class="fa-solid fa-user-plus ms-2"></i></el-button>
             </el-empty>
 
-            <div v-else-if="!loadingUsers" class="base_table overflow-x-auto shadow rounded-2 mb-5 show p-3 w-100">
+            <div v-else-if="!loadingUsers" class="base_table shadow rounded-2 mb-5 show p-3 w-100">
 
                 <div class="d-flex justify-content-end gap-2">
                     <el-dropdown v-if="usersSelected.length">
@@ -60,47 +60,49 @@
                 </div>
 
                 <div v-if="filteredUsers.length">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <el-checkbox @change="selectAll($event)" size="large" />
-                                </th>
-                                <th class="custom_dark">Nome</th>
-                                <th class="custom_dark">Tipo</th>
-                                <th class="custom_dark">E-mail</th>
-                                <th class="text-center custom_dark">Status</th>
-                                <th class="text-center custom_dark">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="user in paginatedUsers" :key="user.id">
-                                <th>
-                                    <el-checkbox size="large" v-model="user.selected" @change="setUserSelected(user)"/>
-                                </th>
-                                <td class="text-secondary">
-                                    <img class="user-photo me-1" :src="user.photo ? user.photo : defaultImgUser"
-                                        alt="Usuário">
-                                    {{ user.name }}
-                                </td>
-                                <td class="text-secondary fs-7">
-                                    {{ user.role == "admin" ? "Administrador" : "Super" }}
-                                </td>
-                                <td class="text-secondary"><span class="user_email">{{ user.email }}</span></td>
-                                <td class="text-secondary text-center">
-                                    <span class="text-white rounded-2 px-2 fs-8"
-                                        :class="{'user_active': user.active === 'Y', 'user_inative': user.active === 'N'}">
-                                        {{ user.active == "Y" ? "Ativo" : "Inativo" }}
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <i class="fa-solid fa-eye text-secondary me-3 cursor_pointer"></i>
-                                    <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
-                                    <i @click="openModalDelete(), userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <el-checkbox @change="selectAll($event)" size="large" />
+                                    </th>
+                                    <th class="custom_dark">Nome</th>
+                                    <th class="custom_dark">Tipo</th>
+                                    <th class="custom_dark">E-mail</th>
+                                    <th class="text-center custom_dark">Status</th>
+                                    <th class="text-center custom_dark">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="user in paginatedUsers" :key="user.id">
+                                    <th>
+                                        <el-checkbox size="large" v-model="user.selected" @change="setUserSelected(user)"/>
+                                    </th>
+                                    <td class="text-secondary">
+                                        <img class="user-photo me-1" :src="user.photo ? user.photo : defaultImgUser"
+                                            alt="Usuário">
+                                        {{ user.name }}
+                                    </td>
+                                    <td class="text-secondary fs-7">
+                                        {{ user.role == "admin" ? "Administrador" : "Super" }}
+                                    </td>
+                                    <td class="text-secondary"><span class="user_email">{{ user.email }}</span></td>
+                                    <td class="text-secondary text-center">
+                                        <span class="text-white rounded-2 px-2 fs-8"
+                                            :class="{'user_active': user.active === 'Y', 'user_inative': user.active === 'N'}">
+                                            {{ user.active == "Y" ? "Ativo" : "Inativo" }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <i class="fa-solid fa-eye text-secondary me-3 cursor_pointer"></i>
+                                        <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
+                                        <i @click="openModalDelete(), userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div class="d-flex justify-content-end">
                         <el-pagination size="small" background layout="prev, pager, next" :total="filteredUsers.length ? filteredUsers.length : users.length"
@@ -521,7 +523,7 @@ export default {
 }
 
 table {
-    min-width: 732px;
+    min-width: 880px;
 }
 
 .user-photo {
