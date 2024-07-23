@@ -31,25 +31,30 @@
                 <button class="btn border-0" @click="showNavigation()">
                     <i :class="['fa-solid fs-4', iconNavigation]"></i>
                 </button>
-                <div class="d-flex justify-content-center align-items-center gap-2">
-                    <a id="btn-visit-site" href="/" target="_blank" class="btn btn-outline-primary d-flex align-items-center"><i v-if="innerWidth >= 342" class="fa-solid fa-globe me-1 text-primary"></i>SITE</a>
-                    <div class="dropdown">
-                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                    <el-button>
+                        <el-link href="/" target="_blank" :underline="false"><i v-if="innerWidth >= 342" class="fa-solid fa-globe me-1"></i>SITE</el-link>
+                    </el-button>
+                    
+                    <el-dropdown :hide-on-click="false">
+                        <span>
                             <img class="user-photo me-1" :src="userStore.user.photo ? user.pathPhoto + userStore.user.photo : require('@/assets/img/default/user.png')" alt="Foto">
                             {{ userStore.user.name }}
                             <template v-if="innerWidth >= 375">
                                 {{ userStore.user.lastName }}
                             </template>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li class="mb-2">
-                                <router-link class="dropdown-item" to="/app/minha-conta"><i class="fa-regular fa-user me-2"></i>Minha conta</router-link>
-                            </li>
-                            <li>
-                                <a class="dropdown-item cursor_pointer" @click="logout()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a>
-                            </li>
-                        </ul>
-                    </div>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>
+                                    <router-link class="dropdown-item" to="/app/minha-conta"><i class="fa-regular fa-user me-2"></i>Minha conta</router-link>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <a class="dropdown-item cursor_pointer" @click="logout()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sair</a>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
                 </div>
             </div>
             <div class="routes p-2">
@@ -212,11 +217,6 @@ nav .nav-link i {
 
 .routes {
     -ms-overflow-style: none; 
-}
-
-#btn-visit-site:hover .fa-globe {
-    color: #fff !important;
-    transition: 0.28s ease-in-out;
 }
 
 .user-photo {
