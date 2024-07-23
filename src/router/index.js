@@ -9,6 +9,7 @@ import PortfolioView from '@/views/admin/PortfolioView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import EmailConfigView from '@/views/admin/EmailConfigView.vue';
 import AuthService from '@/services/AuthService';
+import AccountView from '@/views/admin/AccountView.vue';
 import { alertStore } from '@/store/alertStore';
 import { loadingPageStore } from '@/store/loadingPageStore';
 import { showError } from '@/helpers/showError'; 
@@ -63,6 +64,11 @@ const routes = [
                 name: 'Configuracoes-email',
                 component: EmailConfigView,
                 meta: {requirePermission: 'emailSending'}
+            },
+            {
+                path: 'minha-conta',
+                name: 'Minha-conta',
+                component: AccountView,
             }
         ]
     },
