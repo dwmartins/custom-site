@@ -109,9 +109,9 @@
         <p>Tem certeza de que deseja excluir este usuário? Esta ação é permanente e não pode ser desfeita.</p>
         <template #footer>
             <div class="dialog-footer">
-                <el-button @click="dialogs.deleteUser = false">Cancelar</el-button>
-                <el-button type="danger" @click="deleteUser()">
-                    Confirmar
+                <el-button @click="dialogs.deleteUser = false" :disabled="isLoading.deleteUser">Cancelar</el-button>
+                <el-button type="danger" @click="deleteUser()" :loading="isLoading.deleteUser">
+                    {{ isLoading.deleteUser ? "Aguarde" : "Confirmar" }}
                 </el-button>
             </div>
         </template>
@@ -249,7 +249,8 @@ export default {
                 Search
             },
             isLoading: {
-                userInfo: false
+                userInfo: false,
+                deleteUser: false
             },
             filters: {
                 status: "",
@@ -303,8 +304,10 @@ export default {
         },
 
         async deleteUser() {
+            this.isLoading.deleteUser = true;
             try {
                 const response = await UserService.deleteUser(this.userToDelete.id);
+                this.isLoading.deleteUser = false;
                 if(response) {
                     this.dialogs.deleteUser = false;
 
@@ -316,6 +319,7 @@ export default {
                     showAlert('success', 'Sucesso', response.data.message);
                 }
             } catch (error) {
+                this.isLoading.deleteUser = false;
                 this.dialogs.deleteUser = false;
                 console.error('Falha ao deletar o usuário', error);
             }
