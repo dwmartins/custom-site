@@ -271,7 +271,8 @@ export default {
             filters: {
                 status: "",
                 role: "",
-                input: ""
+                input: "",
+                applied: false
             },
             emptyUsers: false,
         }
@@ -314,7 +315,7 @@ export default {
         },
 
         selectAll(event) {
-            this.users.forEach(user => {
+            this.filteredUsers.forEach(user => {
                 event ? user.selected = true : user.selected = false;
                 this.setUserSelected(user);
             });
@@ -349,6 +350,8 @@ export default {
                     if(index !== -1) {
                         this.users.splice(index, 1);
                     }
+
+                    this.cleanFilter();
 
                     showAlert('success', 'Sucesso', response.data.message);
                 }
@@ -385,6 +388,8 @@ export default {
                         }
                     }
 
+                    this.cleanFilter();
+
                     showAlert('success', 'Sucesso', response.data.message);
                 } catch (error) {
                     this.isLoading.deleteUser = false;
@@ -418,7 +423,6 @@ export default {
             if(user) {
                 this.user = {...user};
                 this.user.active = user.active == "Y" ? true : false;
-                console.log(user)
             }
 
             this.dialogs.userInfo.active = true;
@@ -458,7 +462,7 @@ export default {
                                      user.email.toLowerCase().includes(this.filters.input.toLowerCase());
                 const matchesRole = this.filters.role ? user.role === this.filters.role : true;
                 const matchesStatus = this.filters.status ? (user.active === this.filters.status) : true;
-
+                this.filters.applied = true;
                 
                 return matchesInput && matchesRole && matchesStatus;
             });
@@ -468,6 +472,7 @@ export default {
             this.filters.input = "";
             this.filters.role = "";
             this.filters.status = "";
+            this.filters.applied = false;
 
             this.filteredUsers = this.users;
         }
