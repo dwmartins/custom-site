@@ -7,56 +7,100 @@
                 <AppSpinnerLoading message="Buscando usuários..." color="text-primary-emphasis" width="big" />
             </div>
 
-            <div v-if="!loadingUsers" class="base_table overflow-x-auto shadow rounded-2 mb-5 show p-3 w-100">
+            <el-empty v-if="emptyUsers" description="Nenhum usuário encontrado." :image-size="200" >
+                <el-button @click="openModal('newUser')" size="small" type="primary">Adicionar<i class="fa-solid fa-user-plus ms-2"></i></el-button>
+            </el-empty>
+
+            <div v-else-if="!loadingUsers" class="base_table overflow-x-auto shadow rounded-2 mb-5 show p-3 w-100">
+
                 <div class="d-flex justify-content-end">
                     <el-button @click="openModal('newUser')" type="primary">Novo<i class="fa-solid fa-user-plus ms-2"></i></el-button>
                 </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <el-checkbox @change="selectAll($event)" size="large" />
-                            </th>
-                            <th class="custom_dark">Nome</th>
-                            <th class="custom_dark">Tipo</th>
-                            <th class="custom_dark">E-mail</th>
-                            <th class="text-center custom_dark">Status</th>
-                            <th class="text-center custom_dark">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in paginatedUsers" :key="user.id">
-                            <th>
-                                <el-checkbox size="large" v-model="user.selected" />
-                            </th>
-                            <td class="text-secondary">
-                                <img class="user-photo me-1" :src="user.photo ? user.photo : defaultImgUser"
-                                    alt="Usuário">
-                                {{ user.name }}
-                            </td>
-                            <td class="text-secondary fs-7">
-                                {{ user.role == "admin" ? "Administrador" : "Super" }}
-                            </td>
-                            <td class="text-secondary"><span class="user_email">{{ user.email }}</span></td>
-                            <td class="text-secondary text-center">
-                                <span class="text-white rounded-2 px-2 fs-8"
-                                    :class="{'user_active': user.active === 'Y', 'user_inative': user.active === 'N'}">
-                                    {{ user.active == "Y" ? "Ativo" : "Inativo" }}
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <i class="fa-solid fa-eye text-secondary me-3 cursor_pointer"></i>
-                                <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
-                                <i @click="dialogs.deleteUser = true, userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
 
-                <div class="d-flex justify-content-end">
-                    <el-pagination size="small" background layout="prev, pager, next" :total="users.length"
-                        :page-size="pagination.usersPerPage" @current-change="handlePageChange" class="mt-4" />
+                <hr class="custom-hr-dark">
+
+                <div class="container-fluid py-3">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <el-input
+                                v-model="filters.input"
+                                placeholder="Please Input"
+                                :prefix-icon="icons.Search"
+                                @input="filter()"
+                            />
+                        </div>
+                        <div class="col-6 col-md-2 mb-3">
+                            <el-select v-model="filters.role" id="filter_role" placeholder="Tipo">
+                                <el-option label="Administrador" value="admin" />
+                                <el-option label="Super" value="super"  />
+                            </el-select>
+                        </div>
+                        <div class="col-6 col-md-2 mb-3">
+                            <el-select v-model="filters.status" id="filter_status" placeholder="Status">
+                                <el-option label="Ativo" value="Y" />
+                                <el-option label="Inativo" value="N"  />
+                            </el-select>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <el-button @click="filter()" type="primary"><i class="fa-solid fa-magnifying-glass me-1"></i>Filtrar</el-button>
+                            <el-button @click="cleanFilter()"><i class="fa-solid fa-eraser me-1"></i>Limpar</el-button>
+                        </div>
+                    </div>
                 </div>
+
+                <div v-if="filteredUsers.length">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <el-checkbox @change="selectAll($event)" size="large" />
+                                </th>
+                                <th class="custom_dark">Nome</th>
+                                <th class="custom_dark">Tipo</th>
+                                <th class="custom_dark">E-mail</th>
+                                <th class="text-center custom_dark">Status</th>
+                                <th class="text-center custom_dark">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in paginatedUsers" :key="user.id">
+                                <th>
+                                    <el-checkbox size="large" v-model="user.selected" />
+                                </th>
+                                <td class="text-secondary">
+                                    <img class="user-photo me-1" :src="user.photo ? user.photo : defaultImgUser"
+                                        alt="Usuário">
+                                    {{ user.name }}
+                                </td>
+                                <td class="text-secondary fs-7">
+                                    {{ user.role == "admin" ? "Administrador" : "Super" }}
+                                </td>
+                                <td class="text-secondary"><span class="user_email">{{ user.email }}</span></td>
+                                <td class="text-secondary text-center">
+                                    <span class="text-white rounded-2 px-2 fs-8"
+                                        :class="{'user_active': user.active === 'Y', 'user_inative': user.active === 'N'}">
+                                        {{ user.active == "Y" ? "Ativo" : "Inativo" }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <i class="fa-solid fa-eye text-secondary me-3 cursor_pointer"></i>
+                                    <i @click="openModal('updateUser', user)" class="fa-solid fa-pen-to-square text-primary cursor_pointer me-3"></i>
+                                    <i @click="dialogs.deleteUser = true, userToDelete = user" class="fa-solid fa-trash-can text-danger cursor_pointer"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-end">
+                        <el-pagination size="small" background layout="prev, pager, next" :total="filteredUsers.length ? filteredUsers.length : users.length"
+                            :page-size="pagination.usersPerPage" @current-change="handlePageChange" class="mt-4" />
+                    </div>
+                </div>
+
+                <el-empty v-else
+                    description="Nenhum usuário encontrado, verifique os filtros aplicados."
+                    :image-size="200"
+                />
             </div>
         </div>
     </section>
@@ -144,7 +188,7 @@
 import AppSpinnerLoading from '@/components/shared/AppSpinnerLoading.vue';
 import UserService from '@/services/UserService';
 import defaultImgUser from '@/assets/img/default/user.png';
-import { User } from '@element-plus/icons-vue';
+import { User, Search } from '@element-plus/icons-vue';
 import { showAlert } from '@/helpers/showAlert';
 
 export default {
@@ -157,6 +201,7 @@ export default {
         return {
             defaultImgUser,
             users: [],
+            filteredUsers: [],
             userToDelete: {},
             defaultUser: {
                 name: "",
@@ -200,11 +245,18 @@ export default {
                 }
             },
             icons: {
-                User
+                User,
+                Search
             },
             isLoading: {
                 userInfo: false
-            }
+            },
+            filters: {
+                status: "",
+                role: "",
+                input: ""
+            },
+            emptyUsers: false,
         }
     },
 
@@ -213,14 +265,10 @@ export default {
     },
 
     computed: {
-        totalPages() {
-            return Math.ceil(this.users.length / this.usersPerPage);
-        },
-
         paginatedUsers() {
             const start = (this.pagination.currentPage - 1) * this.pagination.usersPerPage;
             const end = start + this.pagination.usersPerPage;
-            return this.users.slice(start, end);
+            return this.filteredUsers.slice(start, end);
         }
     },
 
@@ -234,6 +282,9 @@ export default {
 
                 if(response) {
                     this.users = response.data;
+                    this.filteredUsers = this.users;
+
+                    this.emptyUsers = !this.users.length ? true : false;
                 }
             } catch (error) {
                 console.error('Falha ao buscar os usuários', error);
@@ -310,6 +361,7 @@ export default {
                     if(response) {
                         showAlert('success', 'Sucesso', response.data.message);
                         this.users.push({ ...response.data.userData });
+                        this.emptyUsers = !this.users.length ? true : false;
                     }
 
                     return;
@@ -318,6 +370,26 @@ export default {
                     console.error('Falha ao criar o usuário.', error);
                 }
             }
+        },
+
+        filter() {
+            this.filteredUsers = this.users.filter(user => {
+                const matchesInput = user.name.toLowerCase().includes(this.filters.input.toLowerCase()) ||
+                                     user.email.toLowerCase().includes(this.filters.input.toLowerCase());
+                const matchesRole = this.filters.role ? user.role === this.filters.role : true;
+                const matchesStatus = this.filters.status ? (user.active === this.filters.status) : true;
+
+                
+                return matchesInput && matchesRole && matchesStatus;
+            });
+        },
+
+        cleanFilter() {
+            this.filters.input = "";
+            this.filters.role = "";
+            this.filters.status = "";
+
+            this.filteredUsers = this.users;
         }
     }
 };
